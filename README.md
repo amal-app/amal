@@ -12,7 +12,7 @@ is [DevPod](https://devpod.sh/) compatible, so it may be used to make the build 
 Docker compliant CLI, installed
   - Docker must be running!
 - [Visual Studio Code](https://code.visualstudio.com/) (VSCode) installed
-  - [Dev Containers](vscode:extension/ms-vscode-remote.remote-containers) plugin
+  - [Dev Containers](https://aka.ms/vscode-remote/download/containers) plugin
 - [Expo Go](https://expo.dev/client) installed on mobile device
 - [DevPod](https://devpod.sh/) (optional) installed
 
@@ -22,7 +22,7 @@ Docker compliant CLI, installed
 
 1. Open DevPod application.
 2. Click `+ Create` workspace.
-  - Select Docker as provider, VSCode as default IDE.
+    - Select Docker as provider, VSCode as default IDE.
 3. Enter workspace source as `https://github.com/amal-app/amal`
 4. Set Workspace Name (optional)
 5. Click `Create Workspace`.
