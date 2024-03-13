@@ -16,6 +16,44 @@ Docker compliant CLI, installed
 - [Expo Go](https://expo.dev/client) installed on mobile device
 - [DevPod](https://devpod.sh/) (optional) installed
 
+#### Chocolatey Installation
+
+If using Windows, it's recommended to install the pre-requisites using [chocolatey](https://community.chocolatey.org/). If you have some of the applications already installed, consider removing them in favor of the chocolatey installation or modify the command to not install it if you prefer.
+
+```
+choco install docker-desktop docker-compose vscode devpod
+
+code --install-extension ms-vscode-remote.remote-containers
+```
+
+**Note:** For Docker Desktop to work on Windows, [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) must be installed. You will see this be an error if you start Docker Desktop after installing.
+
+#### Homebrew Installation
+
+If using MacOS, it's recommended to install the pre-requisites using [homebrew](https://brew.sh/). If you have some of the applications already installed, consider removing them in favor of the chocolatey installation or modify the command to not install it if you prefer.
+
+```
+brew install --cask docker visual-studio-code
+brew install devpod
+
+code --install-extension ms-vscode-remote.remote-containers
+```
+
+**Note:** This has not been tested.
+
+#### APT Installation
+
+If using an Ubuntu-based operating system, it's recommended to install the pre-requisites using [`apt-get`](https://ubuntu.com/server/docs/package-management) and [`snap`](https://snapcraft.io/).
+
+```
+sudo apt update && sudo apt install -y docker.io docker-compose devpod
+sudo snap install --classic code
+
+code --install-extension ms-vscode-remote.remote-containers
+```
+
+**Note:** This has not been tested.
+
 ### Installation
 
 #### DevPod (recommended)
