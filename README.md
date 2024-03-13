@@ -1,5 +1,18 @@
 # Amal
 
+## Table of Contents
+
+- [Setup](#setup)
+  - [Prerequisites](#prerequisites)
+    - [Chocolatey Installation](#chocolatey-installation)
+    - [Homebrew Installation](#homebrew-installation)
+    - [APT Installation](#apt-installation)
+  - [Installation](#installation)
+    - [DevPod (recommended)](#devpod-recommended)
+    - [Manual](#manual)
+- [Running](#running)
+- [Troubleshooting](#troubleshooting)
+
 ## Setup
 
 This project uses [devcontainers](https://containers.dev/) to streamline the setup process. Moreover, this project 
@@ -56,7 +69,7 @@ code --install-extension ms-vscode-remote.remote-containers
 
 ### Installation
 
-#### DevPod (recommended)
+### DevPod (recommended)
 
 1. Open DevPod application.
 2. Click `+ Create` workspace.
@@ -67,7 +80,7 @@ code --install-extension ms-vscode-remote.remote-containers
 
 This will initialize a Dev Container instance and open an instance of VSCode within the container.
 
-#### Manual
+### Manual
 
 1. Clone this repository.
 2. Open the code in VSCode.
@@ -76,7 +89,7 @@ This will initialize a Dev Container instance and open an instance of VSCode wit
 
 This will initialize a Dev Container instance and open an instance of VSCode within the container.
 
-### Running
+## Running
 
 Wait for post-container-creation tasks to complete. Then, use `npm start` to run. This will run an expo instance, using a tunnel to go around the myriad of issues that can happen due to proxies.
 
@@ -84,7 +97,7 @@ Once the application is finished running, a QR Code will be generated in the out
 
 **Note**: The initial bundle may be slow after scanning the QR code, perhaps due to internet speeds or the tunnel.
 
-### Troubleshooting
+## Troubleshooting
 
 **Issue:** The DevPod container won't connect to VSCode. It says "spawn ENAMETOOLONG"
 
