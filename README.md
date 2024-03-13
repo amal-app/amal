@@ -83,3 +83,18 @@ Wait for post-container-creation tasks to complete. Then, use `npm start` to run
 Once the application is finished running, a QR Code will be generated in the output. Scan the QR code with Expo Go (Android) or the Camera app (iOS) to launch the application.
 
 **Note**: The initial bundle may be slow after scanning the QR code, perhaps due to internet speeds or the tunnel.
+
+### Troubleshooting
+
+**Issue:** The DevPod container won't connect to VSCode. It says "spawn ENAMETOOLONG"
+**Possible Solution:** 
+1. Go on a VSCode instance that isn't in a container.
+2. Go to Remote Explorer, make sure it is in Dev Containers mode. 
+    - If there is nothing shown, and it says to install docker:
+        1. Do `systemctl restart docker` in the terminal (if not `systemd` based or just not Linux-based in general, reload the docker service somehow).
+        2. Reload VSCode. 
+        3. The DevPod instance will then show. 
+3. Right click the container, click `Remove Container` 
+4. Attempt to open the container again in DevPod. 
+
+This then starts the DevPod instance successfully again.
