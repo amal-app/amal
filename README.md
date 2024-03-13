@@ -18,7 +18,7 @@ Docker compliant CLI, installed
 
 #### Chocolatey Installation
 
-If using Windows, it's recommended to install the pre-requisites using [chocolatey](https://community.chocolatey.org/). If you have some of the applications already installed, consider removing them in favor of the chocolatey installation or modify the command to not install it if you prefer.
+If using Windows, it's recommended to install the pre-requisites using [chocolatey](https://community.chocolatey.org/). If you have some of the applications already installed, consider removing them in favor of the homebrew installation or modify the command to not install it if you prefer.
 
 ```
 choco install docker-desktop docker-compose vscode devpod
