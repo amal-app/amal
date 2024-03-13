@@ -87,6 +87,7 @@ Once the application is finished running, a QR Code will be generated in the out
 ### Troubleshooting
 
 **Issue:** The DevPod container won't connect to VSCode. It says "spawn ENAMETOOLONG"
+
 **Possible Solution:** 
 1. Go on a VSCode instance that isn't in a container.
 2. Go to Remote Explorer, make sure it is in Dev Containers mode. 
