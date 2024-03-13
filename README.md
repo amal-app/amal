@@ -69,7 +69,7 @@ code --install-extension ms-vscode-remote.remote-containers
 
 ### Installation
 
-### DevPod (recommended)
+#### DevPod (recommended)
 
 1. Open DevPod application.
 2. Click `+ Create` workspace.
@@ -80,7 +80,7 @@ code --install-extension ms-vscode-remote.remote-containers
 
 This will initialize a Dev Container instance and open an instance of VSCode within the container.
 
-### Manual
+#### Manual
 
 1. Clone this repository.
 2. Open the code in VSCode.
