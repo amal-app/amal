@@ -2,6 +2,7 @@ echo "[setup.sh] Dev machine:"
 uname -a
 
 echo -e "[setup.sh] Installing npm..."
+npm install -g npm@latest
 npm install
 
 echo -e "[setup.sh] Installing watchman..."
