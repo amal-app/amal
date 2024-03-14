@@ -1,3 +1,5 @@
+<img src='https://github.com/amal-app/amal/assets/2886217/2f2c0870-1cd7-44ff-8c93-f82a33bc1b43' width='250'>
+
 # Amal
 
 ## Table of Contents
