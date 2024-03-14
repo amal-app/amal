@@ -34,6 +34,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "82197f20-cf86-4bb6-8108-7691b01e384f"
+      }
+    },
+    "owner": "arham4"
   }
 }
