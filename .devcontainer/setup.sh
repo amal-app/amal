@@ -1,7 +1,7 @@
 echo "[setup.sh] Dev machine:"
 uname -a
 
-echo -e "[setup.sh] Installing npm & eas-cli..."
+echo -e "[setup.sh] Installing libraries..."
 npm install -g npm@latest eas-cli@latest
 
 echo -e "[setup.sh] Performing npm install..."
