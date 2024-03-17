@@ -1,6 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
+import { useFonts, Roboto_700Bold } from '@expo-google-fonts/roboto';
+import { OpenSans_600SemiBold } from '@expo-google-fonts/open-sans';
+import { Lato_400Regular } from '@expo-google-fonts/lato';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -13,8 +15,7 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: 'home',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -22,8 +23,9 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
+    Roboto_700Bold,
+    OpenSans_600SemiBold,
+    Lato_400Regular,
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -50,8 +52,8 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="home" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
