@@ -8,7 +8,7 @@ import Animated, {
 import Constants from 'expo-constants';
 import { HOME_SCREEN, KNOWLEDGE, PRAYING, QURAN } from '@/assets';
 import { View } from '@/components/Themed';
-import { LatoText } from '@/components/StyledText';
+import { LatoText, OpenSansSemiBoldText } from '@/components/StyledText';
 import { StatusBar } from 'expo-status-bar';
 
 const { width, height: screenHeightWithNotch } = Dimensions.get('window');
@@ -41,12 +41,12 @@ const App = () => {
 					style={[styles.image, imageAnimatedStyle]}
 				/>
 				<View style={{ minHeight: height * 0.9 }}>
-          <View style={styles.streaksContainer}>
-            <Image source={QURAN} style={{height: 50, width: 50}} />
-            <Image source={PRAYING} style={{height: 50, width: 50}} />
-            <Image source={KNOWLEDGE} style={{height: 50, width: 50}} />
-          </View>
-					<LatoText>Test</LatoText>
+					<View style={styles.streaksContainer}>
+						<Image source={QURAN} style={{ height: 50, width: 50 }} resizeMode='center' />
+						<Image source={PRAYING} style={{ height: 50, width: 50 }} resizeMode='center' />
+						<Image source={KNOWLEDGE} style={{ height: 50, width: 50 }} resizeMode='center' />
+					</View>
+					<OpenSansSemiBoldText style={{fontSize: 24}}>Challenges</OpenSansSemiBoldText>
 				</View>
 			</Animated.ScrollView>
 		</View>
@@ -61,11 +61,11 @@ const styles = StyleSheet.create({
 		width: width,
 		height: IMG_HEIGHT
 	},
-  streaksContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: width * 0.175,
-  }
+	streaksContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingHorizontal: width * 0.175,
+	}
 });
 
 export default App;
