@@ -43,9 +43,7 @@ const App = () => {
 					style={[styles.image, imageAnimatedStyle]}
 				/>
 				<View style={styles.scrollableContainer}>
-					<View style={styles.draggableContainer}>
-						<View style={styles.draggableOval} />
-					</View>
+					<View style={styles.draggableOval} />
 					<StreaksView />
 				</View>
 			</Animated.ScrollView>
@@ -61,20 +59,19 @@ const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: str
 		width: width,
 		height: IMG_HEIGHT
 	},
-	draggableContainer: {
-		width: '100%',
-		alignItems: 'center',
-		marginVertical: 7.5,
-	},
 	draggableOval: {
 		width: 30,
 		height: 5,
 		borderRadius: 40,
 		backgroundColor: themeColors.accent_3,
-		opacity: 0.7
+		opacity: 0.7,
+		marginVertical: 7.5,
 	},
 	scrollableContainer: {
 		minHeight: height * 0.9,
+		alignItems: 'center',
+		borderTopStartRadius: 20,
+  		borderTopEndRadius: 20,
 	},
 });
 
