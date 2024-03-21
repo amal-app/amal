@@ -66,7 +66,7 @@ const styleSheet = (themeColors: { accent_1: string }) => StyleSheet.create({
     streaksContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: '10%',
+        width: '80%',
     },
     streakItemNotDone: {
         flexDirection: 'row',
