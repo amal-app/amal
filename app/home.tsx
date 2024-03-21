@@ -1,4 +1,4 @@
-import { Dimensions, Platform, StyleSheet, Text, Image } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import Animated, {
 	interpolate,
 	useAnimatedRef,
@@ -6,9 +6,9 @@ import Animated, {
 	useScrollViewOffset
 } from 'react-native-reanimated';
 import Constants from 'expo-constants';
-import { HOME_SCREEN, KNOWLEDGE, PRAYING, QURAN } from '@/assets';
+import { HOME_SCREEN, KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
 import { View, getThemeColors } from '@/components/Themed';
-import { LatoText, OpenSansSemiBoldText } from '@/components/StyledText';
+import StreaksView from '@/components/StreaksView';
 
 const { width, height: screenHeightWithNotch } = Dimensions.get('window');
 const height = screenHeightWithNotch - Constants.statusBarHeight
@@ -46,43 +46,7 @@ const App = () => {
 					<View style={styles.draggableContainer}>
 						<View style={styles.draggableOval} />
 					</View>
-					<View style={styles.streaksContainer}>
-						<View style={styles.streakItemNotDone}>
-							<Image source={QURAN} style={styles.streakIcon} resizeMode='center' />
-							<View style={{ ...styles.streakCircle, backgroundColor: themeColors.accent_3 }}>
-								<OpenSansSemiBoldText 
-									adjustsFontSizeToFit 
-									numberOfLines={1} 
-									style={{...styles.streakText, color: themeColors.secondary_2 }}>
-										82
-								</OpenSansSemiBoldText>
-							</View>
-						</View>
-						<View style={styles.separator} />
-						<View style={styles.streakItemDone}>
-							<Image source={PRAYING} style={styles.streakIcon} resizeMode='center' />
-							<View style={{ ...styles.streakCircle, backgroundColor: themeColors.accent_2 }}>
-								<OpenSansSemiBoldText 
-									adjustsFontSizeToFit 
-									numberOfLines={1} 
-									style={{...styles.streakText, color: themeColors.accent_1, }}>
-										112
-								</OpenSansSemiBoldText>
-							</View>
-						</View>
-						<View style={styles.separator} />
-						<View style={styles.streakItemNotDone}>
-							<Image source={KNOWLEDGE} style={styles.streakIcon} resizeMode='center' />
-							<View style={{ ...styles.streakCircle, backgroundColor: themeColors.accent_3 }}>
-								<OpenSansSemiBoldText 
-									adjustsFontSizeToFit 
-									numberOfLines={1} 
-									style={{...styles.streakText, color: themeColors.secondary_2, }}>
-										6
-								</OpenSansSemiBoldText>
-							</View>
-						</View>
-					</View>
+					<StreaksView />
 				</View>
 			</Animated.ScrollView>
 		</View>
@@ -97,8 +61,8 @@ const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: str
 		width: width,
 		height: IMG_HEIGHT
 	},
-	draggableContainer: { 
-		width: '100%', 
+	draggableContainer: {
+		width: '100%',
 		alignItems: 'center',
 		marginVertical: 7.5,
 	},
@@ -111,41 +75,6 @@ const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: str
 	},
 	scrollableContainer: {
 		minHeight: height * 0.9,
-	},
-	streaksContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingHorizontal: width * 0.1,
-	},
-	streakItemNotDone: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		opacity: 0.75,
-	},
-	streakItemDone: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	streakIcon: {
-		height: 50,
-		width: 50
-	},
-	streakCircle: {
-		marginLeft: 5,
-		width: 40,
-		height: 40,
-		borderRadius: 20,
-		padding: 5,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	streakText: {
-		fontSize: 24,
-	},
-	separator: {
-		width: 1,
-		height: '100%',
-		backgroundColor: themeColors.accent_1,
 	},
 });
 
