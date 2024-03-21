@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, Platform, StyleSheet } from 'react-native';
 import Animated, {
 	interpolate,
 	useAnimatedRef,
@@ -9,6 +9,8 @@ import Constants from 'expo-constants';
 import { HOME_SCREEN, KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
 import { View, getThemeColors } from '@/components/Themed';
 import StreaksView from '@/components/StreaksView';
+import ChallengesView from '@/components/ChallengesView';
+import { StatusBar } from 'expo-status-bar';
 
 const { width, height: screenHeightWithNotch } = Dimensions.get('window');
 const height = screenHeightWithNotch - Constants.statusBarHeight
@@ -45,6 +47,9 @@ const App = () => {
 				<View style={styles.scrollableContainer}>
 					<View style={styles.draggableOval} />
 					<StreaksView />
+					<ChallengesView style={{marginTop: 10}} />
+
+					<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
 				</View>
 			</Animated.ScrollView>
 		</View>
