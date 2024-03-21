@@ -8,6 +8,13 @@ export default {
     tint: tintColorLight,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
+    
+    base: '#34577C', // Yale Blue
+    secondary_1: '#82AABE', // Air Superiority Blue
+    secondary_2: '#FFFFFF', // Pure White
+    accent_1: '#FFD700', // Gold
+    accent_2: '#6EAA6B', // Pastel Green
+    accent_3: '#B6AFAC', // Pastel Grey
   },
   dark: {
     text: '#FFFFFF',
@@ -15,5 +22,12 @@ export default {
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
+
+    base: '#34577C', // Yale Blue
+    secondary_1: '#82AABE', // Air Superiority Blue
+    secondary_2: '#FFFFFF', // Pure White
+    accent_1: '#FFD700', // Gold
+    accent_2: '#6EAA6B', // Pastel Green
+    accent_3: '#B6AFAC', // Pastel Grey
   },
 };
