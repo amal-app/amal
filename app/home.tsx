@@ -26,7 +26,7 @@ import * as Haptics from 'expo-haptics';
 const { width, height: screenHeightWithNotch } = Dimensions.get('window');
 const height = screenHeightWithNotch - Constants.statusBarHeight
 
-const SCROLL_VALUE = -200
+const SCROLL_VALUE = -height * 0.2
 
 const App = () => {
 	const themeColors = getThemeColors()
@@ -69,6 +69,18 @@ const App = () => {
 
 	const bottomSheetAnimation = useAnimatedStyle(() => {
 		return {
+			borderTopLeftRadius: interpolate(
+				animatedValue.value,
+				[SCROLL_VALUE, SCROLL_VALUE / 2, 0],
+				[30, 0, 0],
+				Extrapolation.CLAMP,
+			),
+			borderTopRightRadius: interpolate(
+				animatedValue.value,
+				[SCROLL_VALUE, SCROLL_VALUE / 2, 0],
+				[30, 0, 0],
+				Extrapolation.CLAMP,
+			),
 			transform: [
 				{
 					translateY: interpolate(
@@ -117,8 +129,6 @@ const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: str
 	panelContainer: {
 		height: '100%',
 		alignItems: 'center',
-		borderTopLeftRadius: 32,
-		borderTopRightRadius: 32,
 	},
 	draggableOval: {
 		width: 30,
