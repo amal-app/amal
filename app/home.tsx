@@ -29,7 +29,6 @@ const BOTTOM_PANEL_BORDER_RADIUS = 30;
 
 const App = () => {
 	const themeColors = getThemeColors();
-	const styles = styleSheet(themeColors);
 
 	const lastGestureDy = useSharedValue(0);
 	const animatedValue = useSharedValue(0);
@@ -100,7 +99,7 @@ const App = () => {
 				/>
 				<GestureDetector gesture={pan}>
 					<AnimatedView style={[styles.panelContainer, bottomSheetAnimation]}>
-						<View style={styles.draggableOval} />
+						<View style={[styles.draggableOval, { backgroundColor: themeColors.accent_3 }]} />
 						<StreaksView />
 
 						<ScrollView scrollEventThrottle={16} contentContainerStyle={styles.scrollableContainer}>
@@ -115,7 +114,7 @@ const App = () => {
 	);
 };
 
-const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: string, accent_3: string }) => StyleSheet.create({
+const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
@@ -131,7 +130,6 @@ const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: str
 		width: 30,
 		height: 5,
 		borderRadius: 40,
-		backgroundColor: themeColors.accent_3,
 		opacity: 0.7,
 		marginVertical: 7.5,
 	},
