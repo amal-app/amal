@@ -1,58 +1,103 @@
-import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { Dimensions, Platform, ScrollView, StyleSheet } from 'react-native';
 import Animated, {
+	Extrapolation,
 	interpolate,
 	useAnimatedRef,
 	useAnimatedStyle,
-	useScrollViewOffset
+	useScrollViewOffset,
+	useSharedValue,
+	withSpring
 } from 'react-native-reanimated';
+import {
+	Gesture,
+	GestureDetector,
+	GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import { HOME_SCREEN, KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
-import { View, getThemeColors } from '@/components/Themed';
+import { AnimatedView, View, getThemeColors } from '@/components/Themed';
 import StreaksView from '@/components/StreaksView';
 import ChallengesView from '@/components/ChallengesView';
 import { StatusBar } from 'expo-status-bar';
 
 const { width, height: screenHeightWithNotch } = Dimensions.get('window');
 const height = screenHeightWithNotch - Constants.statusBarHeight
-const IMG_HEIGHT = 300;
+
+const SCROLL_VALUE = -200
 
 const App = () => {
-	const scrollRef = useAnimatedRef<Animated.ScrollView>();
-	const scrollOffset = useScrollViewOffset(scrollRef);
-
 	const themeColors = getThemeColors()
 	const styles = styleSheet(themeColors)
 
-	const imageAnimatedStyle = useAnimatedStyle(() => {
+	const lastGestureDy = useSharedValue(0);
+	const animatedValue = useSharedValue(0);
+
+	const pan = Gesture.Pan()
+		.onChange((event) => {
+			animatedValue.value += event.changeY;
+		})
+		.onFinalize((event) => {
+			const springAnimation = (direction: string) => {
+				// TODO I have no idea why this must be declared within onFinalize?
+				lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
+				animatedValue.value = withSpring(lastGestureDy.value, {
+					overshootClamping: true,
+				});
+			};
+
+			lastGestureDy.value += event.translationY;
+
+			if (event.translationY > 0) {
+				if (event.translationY <= 25) {
+					springAnimation('up');
+				} else {
+					springAnimation('down');
+				}
+			} else {
+				if (event.translationY >= -25) {
+					springAnimation('down');
+				} else {
+					springAnimation('up');
+				}
+			}
+		});
+
+	const bottomSheetAnimation = useAnimatedStyle(() => {
 		return {
 			transform: [
 				{
 					translateY: interpolate(
-						scrollOffset.value,
-						[-IMG_HEIGHT, 0, IMG_HEIGHT],
-						[-IMG_HEIGHT, 0, IMG_HEIGHT]
-					)
+						animatedValue.value,
+						[SCROLL_VALUE, 0],
+						[SCROLL_VALUE, 0],
+						Extrapolation.CLAMP,
+					),
 				},
-			]
-		};
+			],
+		}
 	});
 
 	return (
-		<View style={styles.container}>
-			<Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
+		<GestureHandlerRootView style={styles.container}>
+			<AnimatedView style={styles.container}>
 				<Animated.Image
 					source={HOME_SCREEN}
-					style={[styles.image, imageAnimatedStyle]}
+					style={[styles.image/*, imageAnimatedStyle*/]}
 				/>
-				<View style={styles.scrollableContainer}>
-					<View style={styles.draggableOval} />
-					<StreaksView />
-					<ChallengesView style={{marginTop: 10}} />
+				<GestureDetector gesture={pan}>
+					<AnimatedView style={[styles.panelContainer, bottomSheetAnimation]}>
+						<View style={styles.draggableOval} />
+						<StreaksView />
 
-					<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-				</View>
-			</Animated.ScrollView>
-		</View>
+						<ScrollView scrollEventThrottle={16} contentContainerStyle={styles.scrollableContainer}>
+							<ChallengesView style={{ marginTop: 10 }} />
+						</ScrollView>
+					</AnimatedView>
+				</GestureDetector>
+
+				<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+			</AnimatedView>
+		</GestureHandlerRootView>
 	);
 };
 
@@ -62,7 +107,13 @@ const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: str
 	},
 	image: {
 		width: width,
-		height: IMG_HEIGHT
+		height: '40%',
+	},
+	panelContainer: {
+		height: '100%',
+		alignItems: 'center',
+		borderTopLeftRadius: 32,
+		borderTopRightRadius: 32,
 	},
 	draggableOval: {
 		width: 30,
@@ -73,10 +124,8 @@ const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: str
 		marginVertical: 7.5,
 	},
 	scrollableContainer: {
-		minHeight: height * 0.9,
+		width: '100%',
 		alignItems: 'center',
-		borderTopStartRadius: 20,
-  		borderTopEndRadius: 20,
 	},
 });
 
