@@ -4,9 +4,7 @@ import Animated, {
 	Extrapolation,
 	interpolate,
 	runOnJS,
-	useAnimatedRef,
 	useAnimatedStyle,
-	useScrollViewOffset,
 	useSharedValue,
 	withSpring
 } from 'react-native-reanimated';
@@ -16,53 +14,52 @@ import {
 	GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
-import { HOME_SCREEN, KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
+import { HOME_SCREEN } from '@/assets/images';
 import { AnimatedView, View, getThemeColors } from '@/components/Themed';
 import StreaksView from '@/components/StreaksView';
 import ChallengesView from '@/components/ChallengesView';
 import { StatusBar } from 'expo-status-bar';
 import * as Haptics from 'expo-haptics';
 
-const { width, height: screenHeightWithNotch } = Dimensions.get('window');
-const height = screenHeightWithNotch - Constants.statusBarHeight
+const { height: SCREEN_HEIGHT_WITH_NOTCH } = Dimensions.get('window');
+const SCREEN_HEIGHT = SCREEN_HEIGHT_WITH_NOTCH - Constants.statusBarHeight;
 
-const SCROLL_VALUE = -height * 0.2
+const SCROLL_VALUE = -SCREEN_HEIGHT * 0.2;
+const BOTTOM_PANEL_BORDER_RADIUS = 30;
 
 const App = () => {
-	const themeColors = getThemeColors()
-	const styles = styleSheet(themeColors)
+	const themeColors = getThemeColors();
+	const styles = styleSheet(themeColors);
 
 	const lastGestureDy = useSharedValue(0);
 	const animatedValue = useSharedValue(0);
+
+	const springAnimation = (direction: string, callback?: AnimationCallback) => {
+		// TODO I have no idea why this must be declared within onFinalize?
+		lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
+		animatedValue.value = withSpring(lastGestureDy.value, {
+			overshootClamping: true,
+		}, callback);
+	};
 
 	const pan = Gesture.Pan()
 		.onChange((event) => {
 			animatedValue.value += event.changeY;
 		})
 		.onFinalize((event) => {
-			const springAnimation = (direction: string, callback?: AnimationCallback) => {
-				// TODO I have no idea why this must be declared within onFinalize?
-				lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
-				animatedValue.value = withSpring(lastGestureDy.value, {
-					overshootClamping: true,
-				}, callback);
-			};
-
 			lastGestureDy.value += event.translationY;
 
 			if (event.translationY > 0) {
 				if (event.translationY <= 25) {
-					springAnimation('up');
+					runOnJS(springAnimation)('up');
 				} else {
-					springAnimation('down');
+					runOnJS(springAnimation)('down');
 				}
 			} else {
 				if (event.translationY >= -25) {
-					springAnimation('down');
+					runOnJS(springAnimation)('down');
 				} else {
-					springAnimation('up', () => {
-						runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
-					});
+					runOnJS(springAnimation)('up', () => runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light));
 				}
 			}
 		});
@@ -72,13 +69,13 @@ const App = () => {
 			borderTopLeftRadius: interpolate(
 				animatedValue.value,
 				[SCROLL_VALUE, SCROLL_VALUE / 2, 0],
-				[30, 0, 0],
+				[BOTTOM_PANEL_BORDER_RADIUS, 0, 0],
 				Extrapolation.CLAMP,
 			),
 			borderTopRightRadius: interpolate(
 				animatedValue.value,
 				[SCROLL_VALUE, SCROLL_VALUE / 2, 0],
-				[30, 0, 0],
+				[BOTTOM_PANEL_BORDER_RADIUS, 0, 0],
 				Extrapolation.CLAMP,
 			),
 			transform: [
@@ -123,7 +120,7 @@ const styleSheet = (themeColors: { base: string, accent_1: string, accent_2: str
 		flex: 1,
 	},
 	image: {
-		width: width,
+		width: '100%',
 		height: '40%',
 	},
 	panelContainer: {
