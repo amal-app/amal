@@ -1,7 +1,9 @@
 import { Dimensions, Platform, ScrollView, StyleSheet } from 'react-native';
 import Animated, {
+	AnimationCallback,
 	Extrapolation,
 	interpolate,
+	runOnJS,
 	useAnimatedRef,
 	useAnimatedStyle,
 	useScrollViewOffset,
@@ -19,6 +21,7 @@ import { AnimatedView, View, getThemeColors } from '@/components/Themed';
 import StreaksView from '@/components/StreaksView';
 import ChallengesView from '@/components/ChallengesView';
 import { StatusBar } from 'expo-status-bar';
+import * as Haptics from 'expo-haptics';
 
 const { width, height: screenHeightWithNotch } = Dimensions.get('window');
 const height = screenHeightWithNotch - Constants.statusBarHeight
@@ -37,12 +40,12 @@ const App = () => {
 			animatedValue.value += event.changeY;
 		})
 		.onFinalize((event) => {
-			const springAnimation = (direction: string) => {
+			const springAnimation = (direction: string, callback?: AnimationCallback) => {
 				// TODO I have no idea why this must be declared within onFinalize?
 				lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
 				animatedValue.value = withSpring(lastGestureDy.value, {
 					overshootClamping: true,
-				});
+				}, callback);
 			};
 
 			lastGestureDy.value += event.translationY;
@@ -57,7 +60,9 @@ const App = () => {
 				if (event.translationY >= -25) {
 					springAnimation('down');
 				} else {
-					springAnimation('up');
+					springAnimation('up', () => {
+						runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
+					});
 				}
 			}
 		});
