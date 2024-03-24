@@ -95,7 +95,7 @@ const App = () => {
 			<AnimatedView style={styles.container}>
 				<Animated.Image
 					source={HOME_SCREEN}
-					style={[styles.image/*, imageAnimatedStyle*/]}
+					style={[styles.image]}
 				/>
 				<GestureDetector gesture={pan}>
 					<AnimatedView style={[styles.panelContainer, bottomSheetAnimation]}>
