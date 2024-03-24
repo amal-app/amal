@@ -33,32 +33,32 @@ const App = () => {
 	const lastGestureDy = useSharedValue(0);
 	const animatedValue = useSharedValue(0);
 
-	const springAnimation = (direction: string, callback?: AnimationCallback) => {
-		// TODO I have no idea why this must be declared within onFinalize?
-		lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
-		animatedValue.value = withSpring(lastGestureDy.value, {
-			overshootClamping: true,
-		}, callback);
-	};
-
 	const pan = Gesture.Pan()
 		.onChange((event) => {
 			animatedValue.value += event.changeY;
 		})
 		.onFinalize((event) => {
+			const springAnimation = (direction: string, callback?: AnimationCallback) => {
+				// TODO I have no idea why this must be declared within onFinalize?
+				lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
+				animatedValue.value = withSpring(lastGestureDy.value, {
+					overshootClamping: true,
+				}, callback);
+			};
+
 			lastGestureDy.value += event.translationY;
 
 			if (event.translationY > 0) {
 				if (event.translationY <= 25) {
-					runOnJS(springAnimation)('up');
+					springAnimation('up');
 				} else {
-					runOnJS(springAnimation)('down');
+					springAnimation('down');
 				}
 			} else {
 				if (event.translationY >= -25) {
-					runOnJS(springAnimation)('down');
+					springAnimation('down');
 				} else {
-					runOnJS(springAnimation)('up', () => runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light));
+					springAnimation('up', () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light));
 				}
 			}
 		});
