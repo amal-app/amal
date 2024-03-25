@@ -58,7 +58,7 @@ const App = () => {
 				if (event.translationY >= -25) {
 					springAnimation('down');
 				} else {
-					springAnimation('up', () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light));
+					springAnimation('up', () => runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light));
 				}
 			}
 		});
