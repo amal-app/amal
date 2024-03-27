@@ -1,4 +1,4 @@
-import { Dimensions, Platform, ScrollView, StyleSheet } from 'react-native';
+import { Dimensions, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, {
 	AnimationCallback,
 	Extrapolation,
@@ -6,7 +6,8 @@ import Animated, {
 	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
-	withSpring
+	withSpring,
+	withTiming
 } from 'react-native-reanimated';
 import {
 	Gesture,
@@ -20,6 +21,8 @@ import StreaksView from '@/components/StreaksView';
 import ChallengesView from '@/components/ChallengesView';
 import { StatusBar } from 'expo-status-bar';
 import * as Haptics from 'expo-haptics';
+import ExpandableFloatingButton from '@/components/ExpandableFloatingButton';
+import { useState } from 'react';
 
 const { height: SCREEN_HEIGHT_WITH_NOTCH } = Dimensions.get('window');
 const SCREEN_HEIGHT = SCREEN_HEIGHT_WITH_NOTCH - Constants.statusBarHeight;
@@ -32,6 +35,9 @@ const App = () => {
 
 	const lastGestureDy = useSharedValue(0);
 	const animatedValue = useSharedValue(0);
+	const opacityValue = useSharedValue(0.0);
+
+	const [displayOverlay, setDisplayOverlay] = useState(false);
 
 	const pan = Gesture.Pan()
 		.onChange((event) => {
@@ -90,6 +96,18 @@ const App = () => {
 		}
 	});
 
+	const opacityAnimation = (mode: 'on' | 'off') => {
+		opacityValue.value = withTiming(mode === 'on' ? 0.75 : 0.0, {
+			duration: 300,
+		})
+	};
+
+	const opacityStyle = useAnimatedStyle(() => {
+		return {
+			opacity: opacityValue.value,
+		}
+	});
+
 	return (
 		<GestureHandlerRootView style={styles.container}>
 			<AnimatedView style={styles.container}>
@@ -108,6 +126,23 @@ const App = () => {
 					</AnimatedView>
 				</GestureDetector>
 
+				<AnimatedView style={[styles.overlay, opacityStyle]} />
+
+				<ExpandableFloatingButton onPress={() => { 
+					setDisplayOverlay(!displayOverlay);
+					opacityAnimation(displayOverlay ? 'off' : 'on');
+				}} style={{ position: "absolute", bottom: 20, right: 20 }} expanded={[
+					{
+						onPress: () => { },
+						icon: "edit",
+						label: "Log",
+					},
+					{
+						onPress: () => { },
+						icon: "flag",
+						label: "Challenge",
+					}
+				]} />
 				<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
 			</AnimatedView>
 		</GestureHandlerRootView>
@@ -136,6 +171,10 @@ const styles = StyleSheet.create({
 	scrollableContainer: {
 		width: '100%',
 		alignItems: 'center',
+	},
+	overlay: {
+		...StyleSheet.absoluteFillObject,
+		backgroundColor: 'black',
 	},
 });
 

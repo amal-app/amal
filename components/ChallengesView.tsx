@@ -19,7 +19,6 @@ const ChallengeView = (props: ViewProps) => {
                     <View style={{flex: 1, flexDirection: 'row'}}>
                         <Image source={GetRandomImage()} style={{flex: 1, height: 50, resizeMode: 'contain'}} />
                         {Math.round(Math.random()) === 1 && <Image source={GetRandomImage()} style={{flex: 1, height: 50, resizeMode: 'contain'}} />}
-                        {Math.round(Math.random()) === 1 && <Image source={GetRandomImage()} style={{flex: 1, height: 50, resizeMode: 'contain'}} />}
                     </View>
                 </View>
             </View>
