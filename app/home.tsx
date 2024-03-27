@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 		position: "absolute", 
 		bottom: 20, 
 		right: 20,
-	}
+	},
 	overlay: {
 		...StyleSheet.absoluteFillObject,
 		backgroundColor: 'black',
