@@ -15,26 +15,33 @@ interface ExpandedFloatingButtonProps {
     label: string;
 }
 
+const ExpandedFloatingButton = ({ onPress, icon, label }: ExpandedFloatingButtonProps) => {
+    const themeColors = getThemeColors();
+
+    return (
+        <View style={styles.buttonContainer}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: themeColors.secondary_1 }]} onPress={onPress}>
+                <AntDesign name={icon} size={36} color={themeColors.secondary_2} />
+            </TouchableOpacity>
+            <LatoText style={styles.buttonText}>{label}</LatoText>
+        </View>
+    )
+}
+
 const ExpandableFloatingButton = ({ onPress, expanded, ...viewProps }: ExpandableFloatingButtonProps) => {
     const { style, ...otherProps } = viewProps
 
-    const themeColors = getThemeColors();
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
         <View style={[style, styles.container]} {...otherProps}>
             {isExpanded && expanded.map(button =>
-                <TouchableOpacity style={[styles.button, { backgroundColor: themeColors.secondary_1 }]}>
-                    <AntDesign name={button.icon} size={36} color={themeColors.secondary_2} />
-                    {/* <LatoText style={styles.buttonText}>{button.label}</LatoText> */}
-                </TouchableOpacity>
+                <ExpandedFloatingButton {...button} />
             )}
-            <TouchableOpacity style={[styles.button, { backgroundColor: themeColors.secondary_1 }]} onPress={ () => {
+            <ExpandedFloatingButton onPress={() => {
                 setIsExpanded(!isExpanded);
                 onPress();
-             } }>
-                <AntDesign name={isExpanded ? "close" : "plus"} size={36} color={themeColors.secondary_2} />
-            </TouchableOpacity>
+            }} icon={isExpanded ? 'close' : 'plus'} label='' />
         </View>
     );
 };
@@ -43,10 +50,13 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row'
     },
+    buttonContainer: {
+        alignItems: "center",
+        marginLeft: 10,
+    },
     button: {
         width: 56,
         height: 56,
-        marginLeft: 10,
         borderRadius: 28,
         justifyContent: 'center',
         alignItems: 'center',
@@ -58,8 +68,8 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontSize: 12,
-        marginLeft: 5,
+        fontSize: 8,
+        marginTop: 2,
     },
 });
 
