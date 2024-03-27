@@ -131,7 +131,7 @@ const App = () => {
 				<ExpandableFloatingButton onPress={() => { 
 					setDisplayOverlay(!displayOverlay);
 					opacityAnimation(displayOverlay ? 'off' : 'on');
-				}} style={{ position: "absolute", bottom: 20, right: 20 }} expanded={[
+				}} style={styles.addButton} expanded={[
 					{
 						onPress: () => { },
 						icon: "edit",
@@ -172,6 +172,11 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'center',
 	},
+	addButton: { 
+		position: "absolute", 
+		bottom: 20, 
+		right: 20,
+	}
 	overlay: {
 		...StyleSheet.absoluteFillObject,
 		backgroundColor: 'black',
