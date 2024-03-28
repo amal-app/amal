@@ -66,7 +66,22 @@ const App = () => {
 			}
 		});
 
-	const tap = Gesture.Tap()
+	const screenTapOnBottomSheetUp = Gesture.Tap()
+		.runOnJS(true)
+		.onEnd((event) => {
+			'worklet';
+			if (animatedValue.value === SCROLL_VALUE) {
+				springAnimation('down');
+			}
+		})
+		.onFinalize((event) => {
+			'worklet';
+			if (animatedValue.value === SCROLL_VALUE) {
+				springAnimation('down');
+			}
+		});
+
+	const screenTapOnAdd = Gesture.Tap()
 		.runOnJS(true)
 		.onFinalize((event) => {
 			'worklet';
@@ -132,11 +147,12 @@ const App = () => {
 	return (
 		<GestureHandlerRootView style={styles.container}>
 			<AnimatedView style={styles.container}>
-
-				<Animated.Image
-					source={HOME_SCREEN}
-					style={[styles.image]}
-				/>
+				<GestureDetector gesture={screenTapOnBottomSheetUp}>
+					<Animated.Image
+						source={HOME_SCREEN}
+						style={[styles.image]}
+					/>
+				</GestureDetector>
 				<GestureDetector gesture={pan}>
 					<AnimatedView style={[styles.panelContainer, bottomSheetAnimation]}>
 						<View style={[styles.draggableOval, { backgroundColor: themeColors.accent_3 }]} />
@@ -148,7 +164,7 @@ const App = () => {
 					</AnimatedView>
 				</GestureDetector>
 
-				{displayOverlay && <GestureDetector gesture={tap}><AnimatedView style={[styles.overlay, opacityStyle]} /></GestureDetector>}
+				{displayOverlay && <GestureDetector gesture={screenTapOnAdd}><AnimatedView style={[styles.overlay, opacityStyle]} /></GestureDetector>}
 
 				<ExpandableFloatingButton 
 					isExpanded={isExpanded} 
