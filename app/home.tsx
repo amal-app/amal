@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
 	},
 	addButton: { 
 		position: "absolute", 
-		bottom: 30, 
+		bottom: 20, 
 		right: 20,
 	},
 	overlay: {
