@@ -97,8 +97,16 @@ const App = () => {
 	});
 
 	const opacityAnimation = (mode: 'on' | 'off') => {
+		if (mode === 'on') {
+			setDisplayOverlay(true);
+		}
+
 		opacityValue.value = withTiming(mode === 'on' ? 0.85 : 0.0, {
 			duration: 300,
+		}, () => {
+			if (mode === 'off') {
+				runOnJS(setDisplayOverlay)(false);
+			}
 		})
 	};
 
@@ -111,6 +119,7 @@ const App = () => {
 	return (
 		<GestureHandlerRootView style={styles.container}>
 			<AnimatedView style={styles.container}>
+
 				<Animated.Image
 					source={HOME_SCREEN}
 					style={[styles.image]}
@@ -126,10 +135,9 @@ const App = () => {
 					</AnimatedView>
 				</GestureDetector>
 
-				<AnimatedView style={[styles.overlay, opacityStyle]} />
+				{ displayOverlay && <AnimatedView style={[styles.overlay, opacityStyle]} /> }
 
-				<ExpandableFloatingButton onPress={() => { 
-					setDisplayOverlay(!displayOverlay);
+				<ExpandableFloatingButton onPress={() => {
 					opacityAnimation(displayOverlay ? 'off' : 'on');
 				}} style={styles.addButton} expanded={[
 					{
