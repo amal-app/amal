@@ -1,9 +1,10 @@
-import { Dimensions, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { Dimensions, InteractionManager, NativeModules, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, {
 	AnimationCallback,
 	Extrapolation,
 	interpolate,
 	runOnJS,
+	runOnUI,
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
@@ -40,8 +41,30 @@ const App = () => {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [displayOverlay, setDisplayOverlay] = useState(false);
 
+	const springAnimation = (direction: string, callback?: AnimationCallback) => {
+		"worklet";
+		lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
+		animatedValue.value = withSpring(lastGestureDy.value, {
+			overshootClamping: true,
+		}, callback);
+	};
+
+	const opacityAnimation = (mode: 'on' | 'off') => {
+		"worklet";
+		if (mode === 'on') {
+			setDisplayOverlay(true);
+		}
+
+		opacityValue.value = withTiming(mode === 'on' ? 0.85 : 0.0, {
+			duration: 300,
+		}, () => {
+			if (mode === 'off') {
+				runOnJS(setDisplayOverlay)(false);
+			}
+		})
+	};
+
 	const pan = Gesture.Pan()
-		.runOnJS(true)
 		.onChange((event) => {
 			animatedValue.value += event.changeY;
 		})
@@ -58,35 +81,22 @@ const App = () => {
 				if (event.translationY >= -25) {
 					springAnimation('down');
 				} else {
-					springAnimation('up', () => {
-						'worklet';
-						runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light);
-					});
+					springAnimation('up', () => runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light));
 				}
 			}
 		});
 
 	const screenTapOnBottomSheetUp = Gesture.Tap()
-		.runOnJS(true)
-		.onEnd((event) => {
-			'worklet';
-			if (animatedValue.value === SCROLL_VALUE) {
-				springAnimation('down');
-			}
-		})
 		.onFinalize((event) => {
-			'worklet';
 			if (animatedValue.value === SCROLL_VALUE) {
 				springAnimation('down');
 			}
 		});
 
 	const screenTapOnAdd = Gesture.Tap()
-		.runOnJS(true)
 		.onFinalize((event) => {
-			'worklet';
 			opacityAnimation('off');
-			setIsExpanded(false);
+			runOnJS(setIsExpanded)(false);
 		});
 
 	const bottomSheetAnimation = useAnimatedStyle(() => {
@@ -115,28 +125,6 @@ const App = () => {
 			],
 		}
 	});
-
-	const springAnimation = (direction: string, callback?: AnimationCallback) => {
-		lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
-		animatedValue.value = withSpring(lastGestureDy.value, {
-			overshootClamping: true,
-		}, callback);
-	};
-
-	const opacityAnimation = (mode: 'on' | 'off') => {
-		if (mode === 'on') {
-			setDisplayOverlay(true);
-		}
-
-		opacityValue.value = withTiming(mode === 'on' ? 0.85 : 0.0, {
-			duration: 300,
-		}, () => {
-			'worklet';
-			if (mode === 'off') {
-				runOnJS(setDisplayOverlay)(false);
-			}
-		})
-	};
 
 	const opacityStyle = useAnimatedStyle(() => {
 		return {
