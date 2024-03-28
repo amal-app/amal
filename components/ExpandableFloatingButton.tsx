@@ -3,30 +3,31 @@ import { TouchableOpacity, StyleSheet, View, ViewProps } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { getThemeColors } from './Themed';
 import { LatoText } from './StyledText';
+import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
 
 type ExpandableFloatingButtonProps = {
     onPress: () => void; // todo make optional
     expanded: ExpandedFloatingButtonProps[];
-} & View['props']
+} & View['props'];
 
 interface ExpandedFloatingButtonProps {
     onPress: () => void;
     icon: keyof typeof AntDesign.glyphMap;
     label: string;
-}
+};
 
 const ExpandedFloatingButton = ({ onPress, icon, label }: ExpandedFloatingButtonProps) => {
     const themeColors = getThemeColors();
 
     return (
-        <View style={styles.buttonContainer}>
+        <Animated.View style={styles.buttonContainer} entering={ZoomIn} >
             <TouchableOpacity style={[styles.button, { backgroundColor: themeColors.secondary_1 }]} onPress={onPress}>
                 <AntDesign name={icon} size={36} color={themeColors.secondary_2} />
             </TouchableOpacity>
             <LatoText style={styles.buttonText}>{label}</LatoText>
-        </View>
-    )
-}
+        </Animated.View>
+    );
+};
 
 const ExpandableFloatingButton = ({ onPress, expanded, ...viewProps }: ExpandableFloatingButtonProps) => {
     const { style, ...otherProps } = viewProps
@@ -36,9 +37,9 @@ const ExpandableFloatingButton = ({ onPress, expanded, ...viewProps }: Expandabl
     return (
         <View style={[style, styles.container]} {...otherProps}>
             {isExpanded && expanded.map(button =>
-                <ExpandedFloatingButton {...button} />
+                <ExpandedFloatingButton key={button.label} {...button} />
             )}
-            <ExpandedFloatingButton onPress={() => {
+            <ExpandedFloatingButton key={"toggle"} onPress={() => {
                 setIsExpanded(!isExpanded);
                 onPress();
             }} icon={isExpanded ? 'close' : 'plus'} label='' />
@@ -53,6 +54,11 @@ const styles = StyleSheet.create({
     buttonContainer: {
         alignItems: "center",
         marginLeft: 10,
+        elevation: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
     },
     button: {
         width: 56,
@@ -60,11 +66,6 @@ const styles = StyleSheet.create({
         borderRadius: 28,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-        elevation: 4,
     },
     buttonText: {
         color: 'white',

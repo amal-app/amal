@@ -97,7 +97,7 @@ const App = () => {
 	});
 
 	const opacityAnimation = (mode: 'on' | 'off') => {
-		opacityValue.value = withTiming(mode === 'on' ? 0.75 : 0.0, {
+		opacityValue.value = withTiming(mode === 'on' ? 0.85 : 0.0, {
 			duration: 300,
 		})
 	};
