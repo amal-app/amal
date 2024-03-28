@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { TouchableOpacity, StyleSheet, View, ViewProps } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { getThemeColors } from './Themed';
@@ -6,7 +6,9 @@ import { LatoText } from './StyledText';
 import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
 
 type ExpandableFloatingButtonProps = {
-    onPress: () => void; // todo make optional
+    onPress: () => void;
+    isExpanded: boolean;
+    setIsExpanded: Dispatch<SetStateAction<boolean>>
     expanded: ExpandedFloatingButtonProps[];
 } & View['props'];
 
@@ -29,10 +31,8 @@ const ExpandedFloatingButton = ({ onPress, icon, label }: ExpandedFloatingButton
     );
 };
 
-const ExpandableFloatingButton = ({ onPress, expanded, ...viewProps }: ExpandableFloatingButtonProps) => {
+const ExpandableFloatingButton = ({ onPress, isExpanded, setIsExpanded, expanded, ...viewProps }: ExpandableFloatingButtonProps) => {
     const { style, ...otherProps } = viewProps
-
-    const [isExpanded, setIsExpanded] = useState(false);
 
     return (
         <View style={[style, styles.container]} {...otherProps}>

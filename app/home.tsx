@@ -37,21 +37,15 @@ const App = () => {
 	const animatedValue = useSharedValue(0);
 	const opacityValue = useSharedValue(0.0);
 
+	const [isExpanded, setIsExpanded] = useState(false);
 	const [displayOverlay, setDisplayOverlay] = useState(false);
 
 	const pan = Gesture.Pan()
+		.runOnJS(true)
 		.onChange((event) => {
 			animatedValue.value += event.changeY;
 		})
 		.onFinalize((event) => {
-			const springAnimation = (direction: string, callback?: AnimationCallback) => {
-				// TODO I have no idea why this must be declared within onFinalize?
-				lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
-				animatedValue.value = withSpring(lastGestureDy.value, {
-					overshootClamping: true,
-				}, callback);
-			};
-
 			lastGestureDy.value += event.translationY;
 
 			if (event.translationY > 0) {
@@ -64,9 +58,20 @@ const App = () => {
 				if (event.translationY >= -25) {
 					springAnimation('down');
 				} else {
-					springAnimation('up', () => runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light));
+					springAnimation('up', () => {
+						'worklet';
+						runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light);
+					});
 				}
 			}
+		});
+
+	const tap = Gesture.Tap()
+		.runOnJS(true)
+		.onFinalize((event) => {
+			'worklet';
+			opacityAnimation('off');
+			setIsExpanded(false);
 		});
 
 	const bottomSheetAnimation = useAnimatedStyle(() => {
@@ -96,6 +101,13 @@ const App = () => {
 		}
 	});
 
+	const springAnimation = (direction: string, callback?: AnimationCallback) => {
+		lastGestureDy.value = direction === 'down' ? 0 : SCROLL_VALUE;
+		animatedValue.value = withSpring(lastGestureDy.value, {
+			overshootClamping: true,
+		}, callback);
+	};
+
 	const opacityAnimation = (mode: 'on' | 'off') => {
 		if (mode === 'on') {
 			setDisplayOverlay(true);
@@ -104,6 +116,7 @@ const App = () => {
 		opacityValue.value = withTiming(mode === 'on' ? 0.85 : 0.0, {
 			duration: 300,
 		}, () => {
+			'worklet';
 			if (mode === 'off') {
 				runOnJS(setDisplayOverlay)(false);
 			}
@@ -135,22 +148,27 @@ const App = () => {
 					</AnimatedView>
 				</GestureDetector>
 
-				{ displayOverlay && <AnimatedView style={[styles.overlay, opacityStyle]} /> }
+				{displayOverlay && <GestureDetector gesture={tap}><AnimatedView style={[styles.overlay, opacityStyle]} /></GestureDetector>}
 
-				<ExpandableFloatingButton onPress={() => {
-					opacityAnimation(displayOverlay ? 'off' : 'on');
-				}} style={styles.addButton} expanded={[
-					{
-						onPress: () => { },
-						icon: "edit",
-						label: "Log",
-					},
-					{
-						onPress: () => { },
-						icon: "flag",
-						label: "Challenge",
-					}
-				]} />
+				<ExpandableFloatingButton 
+					isExpanded={isExpanded} 
+					setIsExpanded={setIsExpanded} 
+					onPress={() => {
+						opacityAnimation(displayOverlay ? 'off' : 'on');
+					}} 
+					style={styles.addButton} expanded={[
+						{
+							onPress: () => { },
+							icon: "edit",
+							label: "Log",
+						},
+						{
+							onPress: () => { },
+							icon: "flag",
+							label: "Challenge",
+						}
+					]}
+				/>
 				<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
 			</AnimatedView>
 		</GestureHandlerRootView>
@@ -180,9 +198,9 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'center',
 	},
-	addButton: { 
-		position: "absolute", 
-		bottom: 20, 
+	addButton: {
+		position: "absolute",
+		bottom: 20,
 		right: 20,
 	},
 	overlay: {
