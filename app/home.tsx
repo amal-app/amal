@@ -10,6 +10,7 @@ import Animated, {
 	withSpring,
 	withTiming
 } from 'react-native-reanimated';
+import { router } from 'expo-router';
 import {
 	Gesture,
 	GestureDetector,
@@ -31,7 +32,7 @@ const SCREEN_HEIGHT = SCREEN_HEIGHT_WITH_NOTCH - Constants.statusBarHeight;
 const SCROLL_VALUE = -SCREEN_HEIGHT * 0.2;
 const BOTTOM_PANEL_BORDER_RADIUS = 30;
 
-const App = () => {
+const HomeScreen = () => {
 	const themeColors = getThemeColors();
 
 	const lastGestureDy = useSharedValue(0);
@@ -157,17 +158,15 @@ const App = () => {
 				<ExpandableFloatingButton 
 					isExpanded={isExpanded} 
 					setIsExpanded={setIsExpanded} 
-					onPress={() => {
-						opacityAnimation(displayOverlay ? 'off' : 'on');
-					}} 
+					onPress={ () => opacityAnimation(displayOverlay ? 'off' : 'on') } 
 					style={styles.addButton} expanded={[
 						{
-							onPress: () => { },
+							onPress: () => router.push('/add'),
 							icon: "edit",
 							label: "Log",
 						},
 						{
-							onPress: () => { },
+							onPress: () => router.push('/add'),
 							icon: "flag",
 							label: "Challenge",
 						}
@@ -213,4 +212,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default App;
+export default HomeScreen;
