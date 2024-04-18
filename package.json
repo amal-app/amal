@@ -38,6 +38,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@rneui/base": "^4.0.0-rc.7",
+    "@rneui/themed": "^4.0.0-rc.8",
     "@types/react": "~18.2.45",
     "expo": "^50.0.15",
     "jest": "^29.2.1",

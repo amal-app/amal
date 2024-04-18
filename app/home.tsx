@@ -161,12 +161,12 @@ const HomeScreen = () => {
 					onPress={ () => opacityAnimation(displayOverlay ? 'off' : 'on') } 
 					style={styles.addButton} expanded={[
 						{
-							onPress: () => router.push('/add'),
+							onPress: () => router.push('/add/log'),
 							icon: "edit",
 							label: "Log",
 						},
 						{
-							onPress: () => router.push('/add'),
+							onPress: () => { },
 							icon: "flag",
 							label: "Challenge",
 						}
