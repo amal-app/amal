@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { TouchableOpacity, StyleSheet, View, ViewProps } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { getThemeColors } from './Themed';
 import { LatoText } from './StyledText';
 import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated';
+import { useTheme } from '@rneui/themed';
 
 type ExpandableFloatingButtonProps = {
     onPress: () => void;
@@ -19,12 +19,12 @@ interface ExpandedFloatingButtonProps {
 };
 
 const ExpandedFloatingButton = ({ onPress, icon, label }: ExpandedFloatingButtonProps) => {
-    const themeColors = getThemeColors();
+    const { theme } = useTheme();
 
     return (
         <Animated.View style={styles.buttonContainer} entering={ZoomIn} >
-            <TouchableOpacity style={[styles.button, { backgroundColor: themeColors.secondary_1 }]} onPress={onPress}>
-                <AntDesign name={icon} size={36} color={themeColors.secondary_2} />
+            <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.secondary }]} onPress={onPress}>
+                <AntDesign name={icon} size={36} color={theme.colors.black} />
             </TouchableOpacity>
             <LatoText style={styles.buttonText}>{label}</LatoText>
         </Animated.View>

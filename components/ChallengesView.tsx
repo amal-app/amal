@@ -1,7 +1,7 @@
-import { Button, Image, StyleSheet, View } from 'react-native'
+import { Button, Image, StyleSheet } from 'react-native'
 import React from 'react'
-import { LatoText, OpenSansSemiBoldText, RobotoBoldText } from './StyledText';
-import { ViewProps, getThemeColors } from './Themed';
+import { OpenSansSemiBoldText, RobotoBoldText } from './StyledText';
+import { DefaultView, View, ViewProps } from './Themed';
 import { FEMALE, MALE } from '@/assets/images';
 
 const GetRandomImage = () => {
@@ -10,25 +10,24 @@ const GetRandomImage = () => {
 
 const ChallengeView = (props: ViewProps) => {
     const { style } = props;
-    const themeColors = getThemeColors();
 
     return (
-        <View style={[styles.challengeContainer, { backgroundColor: themeColors.secondary_1 }, style]}>
-            <View style={{ flex: 2 }}>
-                <View style={{flex: 1}}>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={[styles.challengeContainer, style]}>
+            <DefaultView style={{ flex: 2 }}>
+                <DefaultView style={{flex: 1}}>
+                    <DefaultView style={{flex: 1, flexDirection: 'row'}}>
                         <Image source={GetRandomImage()} style={{flex: 1, height: 50, resizeMode: 'contain'}} />
                         {Math.round(Math.random()) === 1 && <Image source={GetRandomImage()} style={{flex: 1, height: 50, resizeMode: 'contain'}} />}
-                    </View>
-                </View>
-            </View>
-            <View style={{ flex: 6, marginLeft: 10 }}>
+                    </DefaultView>
+                </DefaultView>
+            </DefaultView>
+            <DefaultView style={{ flex: 6, marginLeft: 10 }}>
                 <RobotoBoldText style={{ fontSize: 16 }}>Family Challenge</RobotoBoldText>
                 <OpenSansSemiBoldText>Quran Challenge</OpenSansSemiBoldText>
-            </View>
-            <View style={{ flex: 2 }}>
+            </DefaultView>
+            <DefaultView style={{ flex: 2 }}>
                 <Button title='View' />
-            </View>
+            </DefaultView>
         </View>
     )
 }
@@ -37,9 +36,9 @@ const ChallengesView = (props: ViewProps) => {
     const { style } = props;
 
     return (
-        <View style={[styles.challengesContainer, style]}>
+        <DefaultView style={[styles.challengesContainer, style]}>
             {Array(15).fill(0).map((_, index) => <ChallengeView key={index} />)}
-        </View>
+        </DefaultView>
     )
 };
 

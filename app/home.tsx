@@ -18,13 +18,14 @@ import {
 } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import { HOME_SCREEN } from '@/assets/images';
-import { AnimatedView, View, getThemeColors } from '@/components/Themed';
+import { AnimatedView, View } from '@/components/Themed';
 import StreaksView from '@/components/StreaksView';
 import ChallengesView from '@/components/ChallengesView';
 import { StatusBar } from 'expo-status-bar';
 import * as Haptics from 'expo-haptics';
 import ExpandableFloatingButton from '@/components/ExpandableFloatingButton';
 import { useState } from 'react';
+import { useTheme } from '@rneui/themed';
 
 const { height: SCREEN_HEIGHT_WITH_NOTCH } = Dimensions.get('window');
 const SCREEN_HEIGHT = SCREEN_HEIGHT_WITH_NOTCH - Constants.statusBarHeight;
@@ -33,7 +34,7 @@ const SCROLL_VALUE = -SCREEN_HEIGHT * 0.2;
 const BOTTOM_PANEL_BORDER_RADIUS = 30;
 
 const HomeScreen = () => {
-	const themeColors = getThemeColors();
+    const { theme } = useTheme();
 
 	const lastGestureDy = useSharedValue(0);
 	const animatedValue = useSharedValue(0);
@@ -144,7 +145,7 @@ const HomeScreen = () => {
 				</GestureDetector>
 				<GestureDetector gesture={pan}>
 					<AnimatedView style={[styles.panelContainer, bottomSheetAnimation]}>
-						<View style={[styles.draggableOval, { backgroundColor: themeColors.accent_3 }]} />
+						<View style={[styles.draggableOval, { backgroundColor: theme.colors.grey1 }]} />
 						<StreaksView />
 
 						<ScrollView scrollEventThrottle={16} contentContainerStyle={styles.scrollableContainer}>

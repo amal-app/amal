@@ -1,8 +1,10 @@
 import React from 'react'
-import { View, getThemeColors } from './Themed'
+import { View } from './Themed'
 import { Image, ImageSourcePropType, StyleSheet } from 'react-native'
 import { OpenSansSemiBoldText } from './StyledText'
 import { KNOWLEDGE, PRAYING, QURAN } from '@/assets/images'
+import { useTheme } from '@rneui/themed'
+import { theme } from '@/constants/Colors'
 
 interface StreakProps {
     image: ImageSourcePropType;
@@ -10,17 +12,15 @@ interface StreakProps {
 };
 
 const IncompleteStreak = ({ image, count }: StreakProps) => {
-    const themeColors = getThemeColors();
-    const styles = styleSheet(themeColors);
-
+    const { theme } = useTheme();
     return (
         <View style={styles.streakItemNotDone}>
             <Image source={image} style={styles.streakIcon} resizeMode='center' />
-            <View style={{ ...styles.streakCircle, backgroundColor: themeColors.accent_3 }}>
+            <View style={{ ...styles.streakCircle, backgroundColor: theme.colors.grey1 }}>
                 <OpenSansSemiBoldText
                     adjustsFontSizeToFit
                     numberOfLines={1}
-                    style={{ ...styles.streakText, color: themeColors.secondary_2 }}>
+                    style={{ ...styles.streakText, color: theme.colors.black }}>
                     {count}
                 </OpenSansSemiBoldText>
             </View>
@@ -29,17 +29,15 @@ const IncompleteStreak = ({ image, count }: StreakProps) => {
 };
 
 const CompleteStreak = ({ image, count }: StreakProps) => {
-    const themeColors = getThemeColors();
-    const styles = styleSheet(themeColors);
-
+    const { theme } = useTheme();
     return (
         <View style={styles.streakItemDone}>
             <Image source={image} style={styles.streakIcon} resizeMode='center' />
-            <View style={{ ...styles.streakCircle, backgroundColor: themeColors.accent_2 }}>
+            <View style={{ ...styles.streakCircle, backgroundColor: theme.colors.success }}>
                 <OpenSansSemiBoldText
                     adjustsFontSizeToFit
                     numberOfLines={1}
-                    style={{ ...styles.streakText, color: themeColors.accent_1 }}>
+                    style={{ ...styles.streakText, color: theme.colors.warning }}>
                     {count}
                 </OpenSansSemiBoldText>
             </View>
@@ -48,21 +46,19 @@ const CompleteStreak = ({ image, count }: StreakProps) => {
 };
 
 const StreaksView = () => {
-    const themeColors = getThemeColors()
-    const styles = styleSheet(themeColors)
-
+    const { theme } = useTheme();
     return (
         <View style={styles.streaksContainer}>
             <IncompleteStreak image={QURAN} count={82} />
-            <View style={styles.separator} />
+            <View style={[styles.separator, {backgroundColor: theme.colors.warning}]} />
             <CompleteStreak image={PRAYING} count={112} />
-            <View style={styles.separator} />
+            <View style={[styles.separator, {backgroundColor: theme.colors.warning}]} />
             <IncompleteStreak image={KNOWLEDGE} count={6} />
         </View>
     )
 };
 
-const styleSheet = (themeColors: { accent_1: string }) => StyleSheet.create({
+const styles = StyleSheet.create({
     streaksContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -96,7 +92,6 @@ const styleSheet = (themeColors: { accent_1: string }) => StyleSheet.create({
     separator: {
         width: 1,
         height: '100%',
-        backgroundColor: themeColors.accent_1,
     },
 });
 

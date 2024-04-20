@@ -1,6 +1,6 @@
 import { ImageSourcePropType, StyleSheet } from 'react-native'
-import { DefaultView, View, getThemeColors } from '@/components/Themed';
-import { ButtonGroup, Image } from '@rneui/themed';
+import { DefaultView, View } from '@/components/Themed';
+import { ButtonGroup, Image, useTheme } from '@rneui/themed';
 import React, { useState } from 'react'
 import { KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
 import { LatoText, RobotoBoldText, scaleText } from '@/components/StyledText';
@@ -24,7 +24,7 @@ const LogButton = ({ image, text }: LogButtonProps) => {
 }
 
 const AddScreen = () => {
-  const themeColors = getThemeColors();
+  const { theme } = useTheme();
   const { fontSize, onTextLayout } = scaleText();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -37,7 +37,7 @@ const AddScreen = () => {
           <LogButton image={PRAYING} text='Prayer' />,
           <LogButton image={KNOWLEDGE} text={`Islamic\nKnoweldge`} />,
         ]}
-        containerStyle={[styles.buttonGroupContainer, { backgroundColor: themeColors.background }]}
+        containerStyle={[styles.buttonGroupContainer, { backgroundColor: theme.colors.background }]}
         selectedIndex={selectedIndex}
         onPress={(value) => {
           setSelectedIndex(value);

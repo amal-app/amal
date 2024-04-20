@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { ThemeProvider } from '@rneui/themed';
 import { useFonts, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { OpenSans_600SemiBold } from '@expo-google-fonts/open-sans';
 import { Lato_400Regular } from '@expo-google-fonts/lato';
@@ -8,6 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { theme } from '@/constants/Colors';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,10 +48,8 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider theme={theme}>
       <Stack>
         <Stack.Screen name="home" options={{ headerShown: false }} />
         <Stack.Screen name="add/log" options={{ headerShown: false }} />
