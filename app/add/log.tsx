@@ -4,6 +4,7 @@ import { Button, ButtonGroup, Icon, Image, ThemeConsumer, useTheme } from '@rneu
 import React, { useState } from 'react'
 import { KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
 import { LatoText, RobotoBoldText, scaleText } from '@/components/StyledText';
+import { Stack } from 'expo-router';
 
 interface LogButtonProps {
   image: ImageSourcePropType;
@@ -29,32 +30,35 @@ const AddScreen = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   return (
-    <View style={styles.container}>
-      <RobotoBoldText style={{ fontSize: fontSize }} onLayout={onTextLayout}>What amal have you done?</RobotoBoldText>
-      <ButtonGroup
-        buttons={[
-          <LogButton image={QURAN} text='Quran' />,
-          <LogButton image={PRAYING} text='Prayer' />,
-          <LogButton image={KNOWLEDGE} text={`Islamic\nKnoweldge`} />,
-        ]}
-        containerStyle={[styles.buttonGroupContainer, {
-          backgroundColor: theme.colors.background,
-          borderColor: theme.colors.black,
-        }]}
-        innerBorderStyle={{ color: theme.colors.black }}
-        selectedButtonStyle={{ backgroundColor: theme.colors.secondary }}
-        selectedIndex={selectedIndex}
-        onPress={(value) => {
-          setSelectedIndex(value);
-        }}
-      />
-      <Button 
-        radius={"lg"} 
-        type="solid" 
-        containerStyle={{ width: '95%' }} 
-        disabledStyle={{ backgroundColor: theme.colors.grey0 }}
-        disabled={selectedIndex === -1}>Next</Button>
-    </View>
+    <>
+      <Stack.Screen options={{ title: 'Log Amal' }} />
+      <View style={styles.container}>
+        <RobotoBoldText style={{ fontSize: fontSize }} onLayout={onTextLayout}>What amal have you done?</RobotoBoldText>
+        <ButtonGroup
+          buttons={[
+            <LogButton image={QURAN} text='Quran' />,
+            <LogButton image={PRAYING} text='Prayer' />,
+            <LogButton image={KNOWLEDGE} text={`Islamic\nKnoweldge`} />,
+          ]}
+          containerStyle={[styles.buttonGroupContainer, {
+            backgroundColor: theme.colors.background,
+            borderColor: theme.colors.black,
+          }]}
+          innerBorderStyle={{ color: theme.colors.black }}
+          selectedButtonStyle={{ backgroundColor: theme.colors.secondary }}
+          selectedIndex={selectedIndex}
+          onPress={(value) => {
+            setSelectedIndex(value);
+          }}
+        />
+        <Button
+          radius={"lg"}
+          type="solid"
+          containerStyle={{ width: '95%' }}
+          disabledStyle={{ backgroundColor: theme.colors.grey0 }}
+          disabled={selectedIndex === -1}>Next</Button>
+      </View>
+    </>
   )
 }
 

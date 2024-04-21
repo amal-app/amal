@@ -54,7 +54,7 @@ function RootLayoutNav() {
     <ThemeProvider theme={theme}>
       <Stack>
         <Stack.Screen name="home" options={{ headerShown: false }} />
-        <Stack.Screen name="add/log" options={{ headerShown: false }} />
+        <Stack.Screen name="add/log" />
       </Stack>
     </ThemeProvider>
   );

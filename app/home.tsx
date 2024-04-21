@@ -10,7 +10,7 @@ import Animated, {
 	withSpring,
 	withTiming
 } from 'react-native-reanimated';
-import { router } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import {
 	Gesture,
 	GestureDetector,
@@ -34,7 +34,7 @@ const SCROLL_VALUE = -SCREEN_HEIGHT * 0.2;
 const BOTTOM_PANEL_BORDER_RADIUS = 30;
 
 const HomeScreen = () => {
-    const { theme } = useTheme();
+	const { theme } = useTheme();
 
 	const lastGestureDy = useSharedValue(0);
 	const animatedValue = useSharedValue(0);
@@ -135,47 +135,50 @@ const HomeScreen = () => {
 	});
 
 	return (
-		<GestureHandlerRootView style={styles.container}>
-			<AnimatedView style={styles.container}>
-				<GestureDetector gesture={screenTapOnBottomSheetUp}>
-					<Animated.Image
-						source={HOME_SCREEN}
-						style={[styles.image]}
+		<>
+			<Stack.Screen options={{ title: 'Home' }} />
+			<GestureHandlerRootView style={styles.container}>
+				<AnimatedView style={styles.container}>
+					<GestureDetector gesture={screenTapOnBottomSheetUp}>
+						<Animated.Image
+							source={HOME_SCREEN}
+							style={[styles.image]}
+						/>
+					</GestureDetector>
+					<GestureDetector gesture={pan}>
+						<AnimatedView style={[styles.panelContainer, bottomSheetAnimation]}>
+							<View style={[styles.draggableOval, { backgroundColor: theme.colors.grey2 }]} />
+							<StreaksView />
+
+							<ScrollView scrollEventThrottle={16} contentContainerStyle={styles.scrollableContainer}>
+								<ChallengesView style={{ marginTop: 10 }} />
+							</ScrollView>
+						</AnimatedView>
+					</GestureDetector>
+
+					{displayOverlay && <GestureDetector gesture={screenTapOnAdd}><AnimatedView style={[styles.overlay, opacityStyle]} /></GestureDetector>}
+
+					<ExpandableFloatingButton
+						isExpanded={isExpanded}
+						setIsExpanded={setIsExpanded}
+						onPress={() => opacityAnimation(displayOverlay ? 'off' : 'on')}
+						style={styles.addButton} expanded={[
+							{
+								onPress: () => router.push('/add/log'),
+								icon: "edit",
+								label: "Log",
+							},
+							{
+								onPress: () => { },
+								icon: "flag",
+								label: "Challenge",
+							}
+						]}
 					/>
-				</GestureDetector>
-				<GestureDetector gesture={pan}>
-					<AnimatedView style={[styles.panelContainer, bottomSheetAnimation]}>
-						<View style={[styles.draggableOval, { backgroundColor: theme.colors.grey2 }]} />
-						<StreaksView />
-
-						<ScrollView scrollEventThrottle={16} contentContainerStyle={styles.scrollableContainer}>
-							<ChallengesView style={{ marginTop: 10 }} />
-						</ScrollView>
-					</AnimatedView>
-				</GestureDetector>
-
-				{displayOverlay && <GestureDetector gesture={screenTapOnAdd}><AnimatedView style={[styles.overlay, opacityStyle]} /></GestureDetector>}
-
-				<ExpandableFloatingButton 
-					isExpanded={isExpanded} 
-					setIsExpanded={setIsExpanded} 
-					onPress={ () => opacityAnimation(displayOverlay ? 'off' : 'on') } 
-					style={styles.addButton} expanded={[
-						{
-							onPress: () => router.push('/add/log'),
-							icon: "edit",
-							label: "Log",
-						},
-						{
-							onPress: () => { },
-							icon: "flag",
-							label: "Challenge",
-						}
-					]}
-				/>
-				<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-			</AnimatedView>
-		</GestureHandlerRootView>
+					<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+				</AnimatedView>
+			</GestureHandlerRootView>
+		</>
 	);
 };
 
