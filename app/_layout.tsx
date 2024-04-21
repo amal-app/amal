@@ -7,8 +7,8 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
-import { useColorScheme } from '@/components/useColorScheme';
-import { theme } from '@/constants/Colors';
+import { useColorScheme } from 'react-native';
+import { CreateTheme } from '@/constants/Colors';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,6 +48,8 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const colorScheme = useColorScheme();
+  const theme = CreateTheme(colorScheme === 'dark' ? 'dark' : 'light');
   return (
     <ThemeProvider theme={theme}>
       <Stack>

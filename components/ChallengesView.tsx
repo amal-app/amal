@@ -3,16 +3,18 @@ import React from 'react'
 import { OpenSansSemiBoldText, RobotoBoldText } from './StyledText';
 import { DefaultView, View, ViewProps } from './Themed';
 import { FEMALE, MALE } from '@/assets/images';
+import { useTheme } from '@rneui/themed';
 
 const GetRandomImage = () => {
     return Math.round(Math.random()) === 1 ? MALE : FEMALE
 }
 
 const ChallengeView = (props: ViewProps) => {
+    const { theme } = useTheme();
     const { style } = props;
 
     return (
-        <View style={[styles.challengeContainer, style]}>
+        <DefaultView style={[styles.challengeContainer, style, { backgroundColor: theme.colors.secondary }]}>
             <DefaultView style={{ flex: 2 }}>
                 <DefaultView style={{flex: 1}}>
                     <DefaultView style={{flex: 1, flexDirection: 'row'}}>
@@ -28,7 +30,7 @@ const ChallengeView = (props: ViewProps) => {
             <DefaultView style={{ flex: 2 }}>
                 <Button title='View' />
             </DefaultView>
-        </View>
+        </DefaultView>
     )
 }
 

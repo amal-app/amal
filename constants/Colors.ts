@@ -12,4 +12,4 @@ const lightColors = {
   background: '#5C8ABA',
 };
 
-export const theme = createTheme({ darkColors, lightColors });
+export const CreateTheme = (mode: 'dark' | 'light') => createTheme({ darkColors, lightColors, mode });
