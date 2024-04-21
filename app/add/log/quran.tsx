@@ -4,7 +4,7 @@ import { Stack } from 'expo-router'
 import { View as ThemedView } from '@/components/Themed'
 import { Button, Dialog, Icon, Text, makeStyles } from '@rneui/themed'
 import { Picker, PickerIOS } from '@react-native-picker/picker'
-import { OpenSansSemiBoldText, RobotoBoldText, scaleText } from '@/components/StyledText'
+import { LatoText, OpenSansSemiBoldText, RobotoBoldText, scaleText } from '@/components/StyledText'
 
 const LogQuranScreen = () => {
     const { fontSize, onTextLayout } = scaleText();
@@ -17,7 +17,7 @@ const LogQuranScreen = () => {
         { name: 'Surah Baqarah', verses: Array.from({ length: 286 + 1 }, (_, i) => i == 0 ? '' : 'Verse ' + i.toString()) },
         { name: 'Surah Imran', verses: Array.from({ length: 200 + 1 }, (_, i) => i == 0 ? '' : 'Verse ' + i.toString()) },
     ];
-    
+
     const [selectedSurah, setSelectedSurah] = useState<string>(surahs[0].name);
     const [selectedVerse, setSelectedVerse] = useState<string>(surahs[0].verses[0]);
 
@@ -36,12 +36,13 @@ const LogQuranScreen = () => {
         <>
             <Stack.Screen options={{ title: 'Log Quran' }} />
             <ThemedView style={styles.container}>
+                {/* Base screen for logging quran */}
                 <RobotoBoldText style={{ fontSize: fontSize, marginBottom: 5, }} onLayout={onTextLayout}>Want to log anything else?</RobotoBoldText>
                 <View style={styles.inputContainer2}>
                     <OpenSansSemiBoldText style={styles.label}>Duration</OpenSansSemiBoldText>
                     <TouchableOpacity onPress={toggleDurationVisibleDialog} style={styles.click}>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <Text style={{ marginRight: 10 }}>Select duration...</Text>
+                            <LatoText>Select duration...</LatoText>
                             <Icon name="chevron-right"></Icon>
                         </View>
                     </TouchableOpacity>
@@ -50,12 +51,20 @@ const LogQuranScreen = () => {
                     <OpenSansSemiBoldText style={styles.label}>Last Verse</OpenSansSemiBoldText>
                     <TouchableOpacity onPress={toggleLastVerseDialog} style={styles.click}>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <Text style={{ marginRight: 10 }}>Select last quran verse...</Text>
+                            <LatoText>Select last Quran verse...</LatoText>
                             <Icon name="chevron-right"></Icon>
                         </View>
                     </TouchableOpacity>
                 </View>
 
+                <LatoText style={{ marginTop: 5 }}>Note: The above options are <OpenSansSemiBoldText>optional</OpenSansSemiBoldText>.</LatoText>
+
+                <Button
+                    radius={"lg"}
+                    type="solid"
+                    containerStyle={{ width: '95%', marginTop: 5 }}>Log</Button>
+
+                {/* Dialog for duration input */}
                 <Dialog
                     isVisible={durationVisible}
                     onBackdropPress={toggleDurationVisibleDialog}
@@ -79,7 +88,7 @@ const LogQuranScreen = () => {
                             style={styles.durationPicker}
                         >
                             {[...Array(4)].map((_, i) => (
-                                <Picker.Item key={i} label={(i  * 15).toString()} value={(i * 15).toString()} />
+                                <Picker.Item key={i} label={(i * 15).toString()} value={(i * 15).toString()} />
                             ))}
                         </Picker>
                         <Text>minutes</Text>
@@ -90,13 +99,14 @@ const LogQuranScreen = () => {
                         containerStyle={{ width: '95%', marginTop: 10 }}>Set Duration</Button>
                 </Dialog>
 
+                {/* Dialog for last verse input */}
                 <Dialog
                     isVisible={lastVerseVisible}
                     onBackdropPress={toggleLastVerseDialog}
                     overlayStyle={styles.dialogContainer}
                 >
                     <Dialog.Title title="Select Last Verse" titleStyle={styles.dialogTitle} />
-                    <View style={[styles.inputContainer, {marginTop: 5}]}>
+                    <View style={[styles.inputContainer, { marginTop: 5 }]}>
                         <View style={styles.lengthInputContainer}>
                             <PickerIOS
                                 selectedValue={selectedSurah}
@@ -134,12 +144,6 @@ const LogQuranScreen = () => {
                             containerStyle={{ width: '95%', marginTop: 10 }}>Set Last Verse</Button>
                     </View>
                 </Dialog>
-
-                {/* Log Button */}
-                <Button
-                    radius={"lg"}
-                    type="solid"
-                    containerStyle={{ width: '95%', marginTop: 10 }}>Log</Button>
             </ThemedView>
         </>
     )
