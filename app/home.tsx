@@ -145,7 +145,7 @@ const HomeScreen = () => {
 				</GestureDetector>
 				<GestureDetector gesture={pan}>
 					<AnimatedView style={[styles.panelContainer, bottomSheetAnimation]}>
-						<View style={[styles.draggableOval, { backgroundColor: theme.colors.grey3 }]} />
+						<View style={[styles.draggableOval, { backgroundColor: theme.colors.grey2 }]} />
 						<StreaksView />
 
 						<ScrollView scrollEventThrottle={16} contentContainerStyle={styles.scrollableContainer}>

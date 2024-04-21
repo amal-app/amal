@@ -16,7 +16,7 @@ const IncompleteStreak = ({ image, count }: StreakProps) => {
     return (
         <View style={styles.streakItemNotDone}>
             <Image source={image} style={styles.streakIcon} resizeMode='center' />
-            <View style={{ ...styles.streakCircle, backgroundColor: theme.colors.grey3 }}>
+            <View style={{ ...styles.streakCircle, backgroundColor: theme.colors.grey2 }}>
                 <OpenSansSemiBoldText
                     adjustsFontSizeToFit
                     numberOfLines={1}
