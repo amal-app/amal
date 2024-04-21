@@ -1,12 +1,16 @@
-import { Button, Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { OpenSansSemiBoldText, RobotoBoldText } from './StyledText';
 import { DefaultView, View, ViewProps } from './Themed';
 import { FEMALE, MALE } from '@/assets/images';
-import { useTheme } from '@rneui/themed';
+import { Button, useTheme } from '@rneui/themed';
 
 const GetRandomImage = () => {
     return Math.round(Math.random()) === 1 ? MALE : FEMALE
+}
+
+const GetRandomColor = (completedColor: string, incompleteColor: string) => {
+    return Math.round(Math.random()) === 1 ? completedColor : incompleteColor
 }
 
 const ChallengeView = (props: ViewProps) => {
@@ -28,7 +32,10 @@ const ChallengeView = (props: ViewProps) => {
                 <OpenSansSemiBoldText>Quran Challenge</OpenSansSemiBoldText>
             </DefaultView>
             <DefaultView style={{ flex: 2 }}>
-                <Button title='View' />
+                <Button
+                  radius={"lg"}
+                  type="solid"
+                  buttonStyle={{backgroundColor: GetRandomColor(theme.colors.success, theme.colors.grey2)}}>View</Button>
             </DefaultView>
         </DefaultView>
     )
