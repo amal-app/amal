@@ -48,8 +48,8 @@ const LogQuranScreen = () => {
                             onValueChange={(itemValue) => setMinutes(itemValue.toString())}
                             style={styles.timePicker}
                         >
-                            {[...Array(3)].map((_, i) => (
-                                <Picker.Item key={i} label={((i + 1) * 15).toString()} value={((i + 1) * 15).toString()} />
+                            {[...Array(4)].map((_, i) => ( 
+                                <Picker.Item key={i} label={(i * 15).toString()} value={(i * 15).toString()} />
                             ))}
                         </Picker>
                         <Text>minutes</Text>
