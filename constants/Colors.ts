@@ -1,7 +1,7 @@
 import { createTheme } from '@rneui/themed';
 
 const darkColors = {
-  primary: '#34577C',
+  primary: '#82AABE',
   secondary: '#82AABE',
   background: '#34577C',
   success: '#6EAA6B',

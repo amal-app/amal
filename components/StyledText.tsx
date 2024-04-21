@@ -22,7 +22,7 @@ export function scaleText() {
     const textWidth = event.nativeEvent.layout.width;
 
     const newFontSize = (fontSize * width) / textWidth;
-    setFontSize(Math.trunc(newFontSize));
+    setFontSize(Math.trunc(newFontSize - 2));
   };
 
   return {fontSize, onTextLayout}

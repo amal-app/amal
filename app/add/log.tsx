@@ -1,6 +1,6 @@
 import { ImageSourcePropType, StyleSheet } from 'react-native'
 import { DefaultView, View } from '@/components/Themed';
-import { ButtonGroup, Image, useTheme } from '@rneui/themed';
+import { Button, ButtonGroup, Icon, Image, ThemeConsumer, useTheme } from '@rneui/themed';
 import React, { useState } from 'react'
 import { KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
 import { LatoText, RobotoBoldText, scaleText } from '@/components/StyledText';
@@ -26,7 +26,7 @@ const LogButton = ({ image, text }: LogButtonProps) => {
 const AddScreen = () => {
   const { theme } = useTheme();
   const { fontSize, onTextLayout } = scaleText();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   return (
     <View style={styles.container}>
@@ -37,12 +37,23 @@ const AddScreen = () => {
           <LogButton image={PRAYING} text='Prayer' />,
           <LogButton image={KNOWLEDGE} text={`Islamic\nKnoweldge`} />,
         ]}
-        containerStyle={[styles.buttonGroupContainer, { backgroundColor: theme.colors.background }]}
+        containerStyle={[styles.buttonGroupContainer, {
+          backgroundColor: theme.colors.background,
+          borderColor: theme.colors.black,
+        }]}
+        innerBorderStyle={{ color: theme.colors.black }}
+        selectedButtonStyle={{ backgroundColor: theme.colors.secondary }}
         selectedIndex={selectedIndex}
         onPress={(value) => {
           setSelectedIndex(value);
         }}
       />
+      <Button 
+        radius={"lg"} 
+        type="solid" 
+        containerStyle={{ width: '95%' }} 
+        disabledStyle={{ backgroundColor: theme.colors.grey0 }}
+        disabled={selectedIndex === -1}>Next</Button>
     </View>
   )
 }
