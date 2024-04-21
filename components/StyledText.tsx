@@ -21,7 +21,10 @@ export function scaleText() {
     const { width } = Dimensions.get('window');
     const textWidth = event.nativeEvent.layout.width;
 
-    const newFontSize = (fontSize * width) / textWidth;
+    let newFontSize = (fontSize * width) / textWidth;
+    if (newFontSize >= 38) {
+      newFontSize = 38
+    }
     setFontSize(Math.trunc(newFontSize - 2));
   };
 

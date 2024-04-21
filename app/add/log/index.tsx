@@ -4,7 +4,7 @@ import { Button, ButtonGroup, Icon, Image, ThemeConsumer, useTheme } from '@rneu
 import React, { useState } from 'react'
 import { KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
 import { LatoText, RobotoBoldText, scaleText } from '@/components/StyledText';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 
 interface LogButtonProps {
   image: ImageSourcePropType;
@@ -24,7 +24,7 @@ const LogButton = ({ image, text }: LogButtonProps) => {
   )
 }
 
-const AddScreen = () => {
+const LogAmalScreen = () => {
   const { theme } = useTheme();
   const { fontSize, onTextLayout } = scaleText();
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -56,6 +56,7 @@ const AddScreen = () => {
           type="solid"
           containerStyle={{ width: '95%' }}
           disabledStyle={{ backgroundColor: theme.colors.grey0 }}
+          onPress={() => router.push('/add/log/quran')}
           disabled={selectedIndex === -1}>Next</Button>
       </View>
     </>
@@ -80,4 +81,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddScreen;
+export default LogAmalScreen;
