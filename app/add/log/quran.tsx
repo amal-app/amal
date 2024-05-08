@@ -1,15 +1,21 @@
 import { TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Stack } from 'expo-router'
 import { View as ThemedView } from '@/components/Themed'
 import { Button, Dialog, Icon, Text, makeStyles } from '@rneui/themed'
 import { Picker, PickerIOS } from '@react-native-picker/picker'
 import { LatoText, OpenSansSemiBoldText, RobotoBoldText, scaleText } from '@/components/StyledText'
+import axios from 'axios';
 
 const MINUTE_INCREMENTS = 5
 
 const DEFAULT_DURATION = 'Select duration...';
 const DEFAULT_LAST_VERSE = 'Select last Quran verse...';
+
+const EMPTY_SURAH = {
+    englishName: '',
+    numberOfAyahs: 0,
+};
 
 const LogQuranScreen = () => {
     const { fontSize, onTextLayout } = scaleText();
@@ -23,13 +29,25 @@ const LogQuranScreen = () => {
     const [hours, setHours] = useState<number>(0);
     const [minutes, setMinutes] = useState<number>(0);
 
-    const surahs = [
-        { name: 'Surah Baqarah', verses: Array.from({ length: 286 }, (_, i) => `Verse ${i + 1}`) },
-        { name: 'Surah Imran', verses: Array.from({ length: 200 }, (_, i) => `Verse ${i + 1}`) },
-    ];
+    const [surahs, setSurahs] = useState([EMPTY_SURAH]);
 
-    const [selectedSurah, setSelectedSurah] = useState<string>(surahs[0].name);
-    const [selectedVerse, setSelectedVerse] = useState<string>(surahs[0].verses[0]);
+    const [selectedSurah, setSelectedSurah] = useState<string>(surahs[0].englishName);
+    const [selectedVerse, setSelectedVerse] = useState<number>(0);
+
+    useEffect(() => {
+        const fetchQuranMetadata = async () => {
+          try {
+            const response = await axios.get('http://api.alquran.cloud/v1/meta');
+            const { data } = response.data;
+            const surahMetadata = [EMPTY_SURAH].concat(data.surahs.references);
+            setSurahs(surahMetadata);
+          } catch (error) {
+            console.error('Error fetching Quran metadata:', error);
+          }
+        };
+    
+        fetchQuranMetadata();
+      }, []);
 
     const [durationVisible, setDurationVisible] = useState(false);
     const [lastVerseVisible, setLastVerseVisible] = useState(false);
@@ -61,7 +79,7 @@ const LogQuranScreen = () => {
     };
 
     const setLastVerse = () => {
-        if (selectedSurah === surahs[0].name && selectedVerse === surahs[0].verses[0]) {
+        if (selectedSurah === surahs[0].englishName && selectedVerse === 0) {
             setSelected({
                 ...selected,
                 lastVerse: DEFAULT_LAST_VERSE,
@@ -71,7 +89,7 @@ const LogQuranScreen = () => {
         setLastVerseVisible(!lastVerseVisible);
         setSelected({
             ...selected,
-            lastVerse: `${selectedSurah}, ${selectedVerse}`,
+            lastVerse: `${selectedSurah}, Verse ${selectedVerse}`,
         });
     };
 
@@ -152,35 +170,35 @@ const LogQuranScreen = () => {
                     <Dialog.Title title="Select Last Verse" titleStyle={styles.dialogTitle} />
                     <View style={[styles.inputContainer, { marginTop: 5 }]}>
                         <View style={styles.lengthInputContainer}>
-                            <PickerIOS
+                            <Picker
                                 selectedValue={selectedSurah}
                                 onValueChange={(itemValue) => {
                                     if (itemValue === null) {
                                         return;
                                     }
-                                    setSelectedSurah(itemValue.toString());
-                                    setSelectedVerse(surahs.find((s) => s.name === itemValue)?.verses[0]!);
+                                    setSelectedSurah(itemValue);
+                                    setSelectedVerse(1);
                                 }}
                                 style={styles.surahPicker}
                             >
                                 {surahs.map((surah) => (
-                                    <Picker.Item key={surah.name} label={surah.name} value={surah.name} />
+                                    <Picker.Item key={surah.englishName} label={surah.englishName} value={surah.englishName} />
                                 ))}
-                            </PickerIOS>
-                            <PickerIOS
+                            </Picker>
+                            <Picker
                                 selectedValue={selectedVerse}
                                 onValueChange={(itemValue) => {
                                     if (itemValue === null) {
                                         return;
                                     }
-                                    setSelectedVerse(itemValue.toString());
+                                    setSelectedVerse(itemValue);
                                 }}
                                 style={styles.versePicker}
                             >
-                                {surahs.find((s) => s.name === selectedSurah)?.verses.map((verse) => (
-                                    <Picker.Item key={verse} label={verse} value={verse} />
+                                {[...Array(surahs.find((s) => s.englishName === selectedSurah)?.numberOfAyahs!)].map((_, i) => (
+                                    <Picker.Item key={i+ 1} label={`Verse ${i + 1}`} value={i + 1} />
                                 ))}
-                            </PickerIOS>
+                            </Picker>
                         </View>
                         <Button
                             radius={"lg"}
