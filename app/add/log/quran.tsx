@@ -1,11 +1,11 @@
-import { TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Stack } from 'expo-router'
 import { View as ThemedView } from '@/components/Themed'
-import { Button, Dialog, Icon, Text, makeStyles } from '@rneui/themed'
-import { Picker, PickerIOS } from '@react-native-picker/picker'
+import { Button, Text, makeStyles } from '@rneui/themed'
+import { Picker } from '@react-native-picker/picker'
 import { LatoText, OpenSansSemiBoldText, RobotoBoldText, scaleText } from '@/components/StyledText'
 import axios from 'axios';
+import ExtraMetricComponent from '@/components/ExtraMetricComponent'
 
 const MINUTE_INCREMENTS = 5
 
@@ -36,29 +36,21 @@ const LogQuranScreen = () => {
 
     useEffect(() => {
         const fetchQuranMetadata = async () => {
-          try {
-            const response = await axios.get('http://api.alquran.cloud/v1/meta');
-            const { data } = response.data;
-            const surahMetadata = [EMPTY_SURAH].concat(data.surahs.references);
-            setSurahs(surahMetadata);
-          } catch (error) {
-            console.error('Error fetching Quran metadata:', error);
-          }
+            try {
+                const response = await axios.get('http://api.alquran.cloud/v1/meta');
+                const { data } = response.data;
+                const surahMetadata = [EMPTY_SURAH].concat(data.surahs.references);
+                setSurahs(surahMetadata);
+            } catch (error) {
+                console.error('Error fetching Quran metadata:', error);
+            }
         };
-    
+
         fetchQuranMetadata();
-      }, []);
+    }, []);
 
     const [durationVisible, setDurationVisible] = useState(false);
     const [lastVerseVisible, setLastVerseVisible] = useState(false);
-
-    const toggleDurationVisibleDialog = () => {
-        setDurationVisible(!durationVisible);
-    };
-
-    const toggleLastVerseDialog = () => {
-        setLastVerseVisible(!lastVerseVisible);
-    };
 
     const setDuration = () => {
         setDurationVisible(!durationVisible);
@@ -97,26 +89,68 @@ const LogQuranScreen = () => {
         <>
             <Stack.Screen options={{ title: 'Log Quran' }} />
             <ThemedView style={styles.container}>
-                {/* Base screen for logging quran */}
                 <RobotoBoldText style={{ fontSize: fontSize, marginBottom: 5, }} onLayout={onTextLayout}>Want to log anything else?</RobotoBoldText>
-                <View style={styles.inputContainer2}>
-                    <OpenSansSemiBoldText style={styles.label}>Duration</OpenSansSemiBoldText>
-                    <TouchableOpacity onPress={toggleDurationVisibleDialog} style={styles.click}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <LatoText>{selected.duration}</LatoText>
-                            <Icon name="chevron-right"></Icon>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.inputContainer2}>
-                    <OpenSansSemiBoldText style={styles.label}>Last Verse</OpenSansSemiBoldText>
-                    <TouchableOpacity onPress={toggleLastVerseDialog} style={styles.click}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <LatoText>{selected.lastVerse}</LatoText>
-                            <Icon name="chevron-right"></Icon>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                <ExtraMetricComponent
+                    labelName="Duration"
+                    labelValue={() => selected.duration}
+                    dialogVisibleState={[durationVisible, setDurationVisible]}
+                    onDialogPress={setDuration}>
+                    <Picker
+                        selectedValue={hours}
+                        onValueChange={(itemValue) => setHours(itemValue)}
+                        style={styles.durationPicker}
+                    >
+                        {[...Array(24)].map((_, i) => (
+                            <Picker.Item key={i} label={i.toString()} value={i} />
+                        ))}
+                    </Picker>
+                    <Text>hours</Text>
+                    <Picker
+                        selectedValue={minutes}
+                        onValueChange={(itemValue) => setMinutes(itemValue)}
+                        style={styles.durationPicker}
+                    >
+                        {[...Array(60 / MINUTE_INCREMENTS)].map((_, i) => (
+                            <Picker.Item key={i} label={(i * MINUTE_INCREMENTS).toString()} value={i * MINUTE_INCREMENTS} />
+                        ))}
+                    </Picker>
+                    <Text>minutes</Text>
+                </ExtraMetricComponent>
+                <ExtraMetricComponent
+                    labelName="Last Verse"
+                    labelValue={() => selected.lastVerse}
+                    dialogVisibleState={[lastVerseVisible, setLastVerseVisible]}
+                    onDialogPress={setLastVerse}>
+                    <Picker
+                        selectedValue={selectedSurah}
+                        onValueChange={(itemValue) => {
+                            if (itemValue === null) {
+                                return;
+                            }
+                            setSelectedSurah(itemValue);
+                            setSelectedVerse(itemValue === surahs[0].englishName ? 0 : 1);
+                        }}
+                        style={styles.surahPicker}
+                    >
+                        {surahs.map((surah) => (
+                            <Picker.Item key={surah.englishName} label={surah.englishName} value={surah.englishName} />
+                        ))}
+                    </Picker>
+                    <Picker
+                        selectedValue={selectedVerse}
+                        onValueChange={(itemValue) => {
+                            if (itemValue === null) {
+                                return;
+                            }
+                            setSelectedVerse(itemValue);
+                        }}
+                        style={styles.versePicker}
+                    >
+                        {[...Array(surahs.find((s) => s.englishName === selectedSurah)?.numberOfAyahs!)].map((_, i) => (
+                            <Picker.Item key={i + 1} label={`Verse ${i + 1}`} value={i + 1} />
+                        ))}
+                    </Picker>
+                </ExtraMetricComponent>
 
                 <LatoText style={{ marginTop: 5 }}>Note: The above options are <OpenSansSemiBoldText>optional</OpenSansSemiBoldText>.</LatoText>
 
@@ -124,89 +158,6 @@ const LogQuranScreen = () => {
                     radius={"lg"}
                     type="solid"
                     containerStyle={{ width: '95%', marginTop: 5 }}>Log</Button>
-
-                {/* Dialog for duration input */}
-                <Dialog
-                    isVisible={durationVisible}
-                    onBackdropPress={toggleDurationVisibleDialog}
-                    overlayStyle={styles.dialogContainer}
-                >
-                    <Dialog.Title title="Select Duration" titleStyle={styles.dialogTitle} />
-                    <View style={styles.durationInputContainer}>
-                        <Picker
-                            selectedValue={hours}
-                            onValueChange={(itemValue) => setHours(itemValue)}
-                            style={styles.durationPicker}
-                        >
-                            {[...Array(24)].map((_, i) => (
-                                <Picker.Item key={i} label={i.toString()} value={i} />
-                            ))}
-                        </Picker>
-                        <Text>hours</Text>
-                        <Picker
-                            selectedValue={minutes}
-                            onValueChange={(itemValue) => setMinutes(itemValue)}
-                            style={styles.durationPicker}
-                        >
-                            {[...Array(60 / MINUTE_INCREMENTS)].map((_, i) => (
-                                <Picker.Item key={i} label={(i * MINUTE_INCREMENTS).toString()} value={i * MINUTE_INCREMENTS} />
-                            ))}
-                        </Picker>
-                        <Text>minutes</Text>
-                    </View>
-                    <Button
-                        radius={"lg"}
-                        type="solid"
-                        onPress={setDuration}
-                        containerStyle={{ width: '95%', marginTop: 10 }}>Set Duration</Button>
-                </Dialog>
-
-                {/* Dialog for last verse input */}
-                <Dialog
-                    isVisible={lastVerseVisible}
-                    onBackdropPress={toggleLastVerseDialog}
-                    overlayStyle={styles.dialogContainer}
-                >
-                    <Dialog.Title title="Select Last Verse" titleStyle={styles.dialogTitle} />
-                    <View style={[styles.inputContainer, { marginTop: 5 }]}>
-                        <View style={styles.lengthInputContainer}>
-                            <Picker
-                                selectedValue={selectedSurah}
-                                onValueChange={(itemValue) => {
-                                    if (itemValue === null) {
-                                        return;
-                                    }
-                                    setSelectedSurah(itemValue);
-                                    setSelectedVerse(itemValue === surahs[0].englishName ? 0 : 1);
-                                }}
-                                style={styles.surahPicker}
-                            >
-                                {surahs.map((surah) => (
-                                    <Picker.Item key={surah.englishName} label={surah.englishName} value={surah.englishName} />
-                                ))}
-                            </Picker>
-                            <Picker
-                                selectedValue={selectedVerse}
-                                onValueChange={(itemValue) => {
-                                    if (itemValue === null) {
-                                        return;
-                                    }
-                                    setSelectedVerse(itemValue);
-                                }}
-                                style={styles.versePicker}
-                            >
-                                {[...Array(surahs.find((s) => s.englishName === selectedSurah)?.numberOfAyahs!)].map((_, i) => (
-                                    <Picker.Item key={i+ 1} label={`Verse ${i + 1}`} value={i + 1} />
-                                ))}
-                            </Picker>
-                        </View>
-                        <Button
-                            radius={"lg"}
-                            type="solid"
-                            onPress={setLastVerse}
-                            containerStyle={{ width: '95%', marginTop: 10 }}>Set Last Verse</Button>
-                    </View>
-                </Dialog>
             </ThemedView>
         </>
     )
