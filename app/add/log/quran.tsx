@@ -62,7 +62,7 @@ const LogQuranScreen = () => {
 
     const setDuration = () => {
         setDurationVisible(!durationVisible);
-        if (hours === 0 && minutes === 0) {
+        if (hours == 0 && minutes == 0) {
             setSelected({
                 ...selected,
                 duration: DEFAULT_DURATION,
