@@ -61,6 +61,7 @@ const LogQuranScreen = () => {
     };
 
     const setDuration = () => {
+        setDurationVisible(!durationVisible);
         if (hours === 0 && minutes === 0) {
             setSelected({
                 ...selected,
@@ -71,7 +72,6 @@ const LogQuranScreen = () => {
         const hoursDisplay = hours > 1 ? `${hours} hours` : hours == 1 ? `${hours} hour` : ``;
         const minutesDisplay = minutes > 1 ? `${minutes} minutes` : minutes == 1 ? `${minutes} minute` : ``;
         const durationDisplay = hours > 0 ? `${hoursDisplay}${minutes > 0 ? `, ${minutesDisplay}` : ``}` : minutesDisplay;
-        setDurationVisible(!durationVisible);
         setSelected({
             ...selected,
             duration: durationDisplay,
@@ -79,6 +79,7 @@ const LogQuranScreen = () => {
     };
 
     const setLastVerse = () => {
+        setLastVerseVisible(!lastVerseVisible);
         if (selectedSurah === surahs[0].englishName && selectedVerse === 0) {
             setSelected({
                 ...selected,
@@ -86,7 +87,6 @@ const LogQuranScreen = () => {
             });
             return;
         }
-        setLastVerseVisible(!lastVerseVisible);
         setSelected({
             ...selected,
             lastVerse: `Surah ${selectedSurah}, Verse ${selectedVerse}`,
@@ -177,7 +177,7 @@ const LogQuranScreen = () => {
                                         return;
                                     }
                                     setSelectedSurah(itemValue);
-                                    setSelectedVerse(1);
+                                    setSelectedVerse(itemValue === surahs[0].englishName ? 0 : 1);
                                 }}
                                 style={styles.surahPicker}
                             >
