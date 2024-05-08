@@ -148,7 +148,7 @@ const LogQuranScreen = () => {
                             onValueChange={(itemValue) => setMinutes(itemValue)}
                             style={styles.durationPicker}
                         >
-                            {[...Array((60 / MINUTE_INCREMENTS) + 1)].map((_, i) => (
+                            {[...Array(60 / MINUTE_INCREMENTS)].map((_, i) => (
                                 <Picker.Item key={i} label={(i * MINUTE_INCREMENTS).toString()} value={i * MINUTE_INCREMENTS} />
                             ))}
                         </Picker>
