@@ -6,16 +6,26 @@ import { Button, Dialog, Icon, Text, makeStyles } from '@rneui/themed'
 import { Picker, PickerIOS } from '@react-native-picker/picker'
 import { LatoText, OpenSansSemiBoldText, RobotoBoldText, scaleText } from '@/components/StyledText'
 
+const MINUTE_INCREMENTS = 5
+
+const DEFAULT_DURATION = 'Select duration...';
+const DEFAULT_LAST_VERSE = 'Select last Quran verse...';
+
 const LogQuranScreen = () => {
     const { fontSize, onTextLayout } = scaleText();
     const styles = useStyles();
 
-    const [hours, setHours] = useState<string>('');
-    const [minutes, setMinutes] = useState<string>('');
+    const [selected, setSelected] = useState({
+        duration: DEFAULT_DURATION,
+        lastVerse: DEFAULT_LAST_VERSE,
+    });
+
+    const [hours, setHours] = useState<number>(0);
+    const [minutes, setMinutes] = useState<number>(0);
 
     const surahs = [
-        { name: 'Surah Baqarah', verses: Array.from({ length: 286 + 1 }, (_, i) => i == 0 ? '' : 'Verse ' + i.toString()) },
-        { name: 'Surah Imran', verses: Array.from({ length: 200 + 1 }, (_, i) => i == 0 ? '' : 'Verse ' + i.toString()) },
+        { name: 'Surah Baqarah', verses: Array.from({ length: 286 }, (_, i) => `Verse ${i + 1}`) },
+        { name: 'Surah Imran', verses: Array.from({ length: 200 }, (_, i) => `Verse ${i + 1}`) },
     ];
 
     const [selectedSurah, setSelectedSurah] = useState<string>(surahs[0].name);
@@ -32,6 +42,39 @@ const LogQuranScreen = () => {
         setLastVerseVisible(!lastVerseVisible);
     };
 
+    const setDuration = () => {
+        if (hours === 0 && minutes === 0) {
+            setSelected({
+                ...selected,
+                duration: DEFAULT_DURATION,
+            });
+            return;
+        }
+        const hoursDisplay = hours > 1 ? `${hours} hours` : hours == 1 ? `${hours} hour` : ``;
+        const minutesDisplay = minutes > 1 ? `${minutes} minutes` : minutes == 1 ? `${minutes} minute` : ``;
+        const durationDisplay = hours > 0 ? `${hoursDisplay}${minutes > 0 ? `, ${minutesDisplay}` : ``}` : minutesDisplay;
+        setDurationVisible(!durationVisible);
+        setSelected({
+            ...selected,
+            duration: durationDisplay,
+        });
+    };
+
+    const setLastVerse = () => {
+        if (selectedSurah === surahs[0].name && selectedVerse === surahs[0].verses[0]) {
+            setSelected({
+                ...selected,
+                lastVerse: DEFAULT_LAST_VERSE,
+            });
+            return;
+        }
+        setLastVerseVisible(!lastVerseVisible);
+        setSelected({
+            ...selected,
+            lastVerse: `${selectedSurah}, ${selectedVerse}`,
+        });
+    };
+
     return (
         <>
             <Stack.Screen options={{ title: 'Log Quran' }} />
@@ -42,7 +85,7 @@ const LogQuranScreen = () => {
                     <OpenSansSemiBoldText style={styles.label}>Duration</OpenSansSemiBoldText>
                     <TouchableOpacity onPress={toggleDurationVisibleDialog} style={styles.click}>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <LatoText>Select duration...</LatoText>
+                            <LatoText>{selected.duration}</LatoText>
                             <Icon name="chevron-right"></Icon>
                         </View>
                     </TouchableOpacity>
@@ -51,7 +94,7 @@ const LogQuranScreen = () => {
                     <OpenSansSemiBoldText style={styles.label}>Last Verse</OpenSansSemiBoldText>
                     <TouchableOpacity onPress={toggleLastVerseDialog} style={styles.click}>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <LatoText>Select last Quran verse...</LatoText>
+                            <LatoText>{selected.lastVerse}</LatoText>
                             <Icon name="chevron-right"></Icon>
                         </View>
                     </TouchableOpacity>
@@ -74,21 +117,21 @@ const LogQuranScreen = () => {
                     <View style={styles.durationInputContainer}>
                         <Picker
                             selectedValue={hours}
-                            onValueChange={(itemValue) => setHours(itemValue.toString())}
+                            onValueChange={(itemValue) => setHours(itemValue)}
                             style={styles.durationPicker}
                         >
                             {[...Array(24)].map((_, i) => (
-                                <Picker.Item key={i} label={i.toString()} value={i.toString()} />
+                                <Picker.Item key={i} label={i.toString()} value={i} />
                             ))}
                         </Picker>
                         <Text>hours</Text>
                         <Picker
                             selectedValue={minutes}
-                            onValueChange={(itemValue) => setMinutes(itemValue.toString())}
+                            onValueChange={(itemValue) => setMinutes(itemValue)}
                             style={styles.durationPicker}
                         >
-                            {[...Array(4)].map((_, i) => (
-                                <Picker.Item key={i} label={(i * 15).toString()} value={(i * 15).toString()} />
+                            {[...Array((60 / MINUTE_INCREMENTS) + 1)].map((_, i) => (
+                                <Picker.Item key={i} label={(i * MINUTE_INCREMENTS).toString()} value={i * MINUTE_INCREMENTS} />
                             ))}
                         </Picker>
                         <Text>minutes</Text>
@@ -96,6 +139,7 @@ const LogQuranScreen = () => {
                     <Button
                         radius={"lg"}
                         type="solid"
+                        onPress={setDuration}
                         containerStyle={{ width: '95%', marginTop: 10 }}>Set Duration</Button>
                 </Dialog>
 
@@ -141,6 +185,7 @@ const LogQuranScreen = () => {
                         <Button
                             radius={"lg"}
                             type="solid"
+                            onPress={setLastVerse}
                             containerStyle={{ width: '95%', marginTop: 10 }}>Set Last Verse</Button>
                     </View>
                 </Dialog>
