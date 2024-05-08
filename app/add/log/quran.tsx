@@ -89,7 +89,7 @@ const LogQuranScreen = () => {
         setLastVerseVisible(!lastVerseVisible);
         setSelected({
             ...selected,
-            lastVerse: `${selectedSurah}, Verse ${selectedVerse}`,
+            lastVerse: `Surah ${selectedSurah}, Verse ${selectedVerse}`,
         });
     };
 
