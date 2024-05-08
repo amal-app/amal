@@ -37,7 +37,7 @@ const ExtraMetricComponent = ({ labelName, labelValue, dialogVisibleState, onDia
                 overlayStyle={styles.dialogContainer}
             >
                 <Dialog.Title title={`Select ${labelName}`} titleStyle={styles.dialogTitle} />
-                <View style={styles.durationInputContainer}>
+                <View style={styles.dialogInputContainer}>
                     {children}
                 </View>
                 <Button
@@ -86,38 +86,12 @@ const useStyles = makeStyles((theme) => ({
         width: '95%',
         alignItems: 'center',
     },
-    durationInputContainer: {
+    dialogInputContainer: {
         width: '95%',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: theme.colors.secondary,
         borderRadius: 40,
-    },
-    durationPicker: {
-        width: 100,
-    },
-    lengthInputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: theme.colors.secondary,
-        borderRadius: 40,
-    },
-    surahPicker: {
-        width: 200,
-    },
-    versePicker: {
-        width: 175,
-    },
-    logButton: {
-        backgroundColor: '#007bff',
-        borderRadius: 5,
-        padding: 10,
-        alignItems: 'center',
-    },
-    logButtonText: {
-        color: '#fff',
-        fontSize: 16,
     },
 }));

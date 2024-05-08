@@ -171,51 +171,8 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    dialogContainer: {
-        width: '95%',
-        backgroundColor: theme.colors.background,
-    },
-    dialogTitle: {
-        color: theme.colors.black,
-    },
-    inputContainer2: {
-        width: '95%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderColor: 'white',
-        borderWidth: 1,
-        backgroundColor: theme.colors.secondary,
-    },
-    label: {
-        flex: 3,
-    },
-    click: {
-        flex: 5,
-    },
-    inputContainer: {
-        width: '95%',
-        alignItems: 'center',
-    },
-    durationInputContainer: {
-        width: '95%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: theme.colors.secondary,
-        borderRadius: 40,
-    },
     durationPicker: {
         width: 100,
-    },
-    lengthInputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: theme.colors.secondary,
-        borderRadius: 40,
     },
     surahPicker: {
         width: 200,
