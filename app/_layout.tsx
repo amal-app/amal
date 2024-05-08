@@ -1,4 +1,3 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { ThemeProvider } from '@rneui/themed';
 import { useFonts, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { OpenSans_600SemiBold } from '@expo-google-fonts/open-sans';
@@ -9,6 +8,7 @@ import { useEffect } from 'react';
 
 import { useColorScheme } from 'react-native';
 import { CreateTheme } from '@/constants/Colors';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -52,11 +52,13 @@ function RootLayoutNav() {
   const theme = CreateTheme(colorScheme === 'dark' ? 'dark' : 'light');
   return (
     <ThemeProvider theme={theme}>
-      <Stack>
-        <Stack.Screen name="home" options={{ headerShown: false }} />
-        <Stack.Screen name="add/log/index" />
-        <Stack.Screen name="add/log/quran" />
-      </Stack>
+      <RootSiblingParent>
+        <Stack>
+          <Stack.Screen name="home" options={{ headerShown: false }} />
+          <Stack.Screen name="add/log/index" />
+          <Stack.Screen name="add/log/quran" />
+        </Stack>
+      </RootSiblingParent>
     </ThemeProvider>
   );
 }

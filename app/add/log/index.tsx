@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { KNOWLEDGE, PRAYING, QURAN } from '@/assets/images';
 import { LatoText, RobotoBoldText, scaleText } from '@/components/StyledText';
 import { Stack, router } from 'expo-router';
+import Toast from 'react-native-root-toast';
 
 interface LogButtonProps {
   image: ImageSourcePropType;
@@ -28,6 +29,19 @@ const LogAmalScreen = () => {
   const { theme } = useTheme();
   const { fontSize, onTextLayout } = scaleText();
   const [selectedIndex, setSelectedIndex] = useState(-1);
+
+  const pushAmalLogPage = () => {
+    if (selectedIndex !== 0) {
+      Toast.show('Unsupported option, check back later!', {
+        duration: Toast.durations.LONG,
+      });
+      return;
+    }
+
+    if (selectedIndex === 0) {
+      router.push(`/add/log/quran`);
+    }
+  };
 
   return (
     <>
@@ -56,7 +70,7 @@ const LogAmalScreen = () => {
           type="solid"
           containerStyle={{ width: '95%' }}
           disabledStyle={{ backgroundColor: theme.colors.grey0 }}
-          onPress={() => router.push('/add/log/quran')}
+          onPress={pushAmalLogPage}
           disabled={selectedIndex === -1}>Next</Button>
       </View>
     </>
