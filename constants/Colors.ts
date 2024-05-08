@@ -9,7 +9,7 @@ const darkColors = {
 };
 
 const lightColors = {
-  primary: '#5C8ABA',
+  primary: '#C5D8E1',
   secondary: '#C5D8E1',
   background: '#5C8ABA',
   success: '#6EAA6B',
